@@ -870,64 +870,92 @@ import Layout from "../layouts/Layout.astro";
     </section>
   </main>
 
-  <script lang="ts">
-    import { animate, inView } from "motion";
+  <script is:inline>
+  import { animate, inView } from "motion";
 
-    // The <HTMLElement> addition here fixes the "style does not exist" error
-    document
-      .querySelectorAll<HTMLElement>("[data-motion]")
-      .forEach((htmlElement) => {
-        // Set initial state
-        const animationType = htmlElement.getAttribute("data-motion");
+  document.querySelectorAll("[data-motion]").forEach((htmlElement) => {
+    const el = htmlElement;
+
+    // Initial state
+    const animationType = el.getAttribute("data-motion");
+
+    if (animationType === "fade-up") {
+      el.style.opacity = "0";
+      el.style.transform = "translateY(40px)";
+    } else if (animationType === "fade-in") {
+      el.style.opacity = "0";
+    } else if (animationType === "zoom-in") {
+      el.style.opacity = "0";
+      el.style.transform = "scale(0.9)";
+    } else if (animationType === "fade-right") {
+      el.style.opacity = "0";
+      el.style.transform = "translateX(-40px)";
+    }
+
+    // Animate on view
+    inView(
+      el,
+      () => {
+        const delayStr = el.style.animationDelay;
+        const delay = delayStr ? parseFloat(delayStr) / 1000 : 0;
 
         if (animationType === "fade-up") {
-          htmlElement.style.opacity = "0";
-          htmlElement.style.transform = "translateY(40px)";
-        } else if (animationType === "fade-in") {
-          htmlElement.style.opacity = "0";
-        } else if (animationType === "zoom-in") {
-          htmlElement.style.opacity = "0";
-          htmlElement.style.transform = "scale(0.9)";
-        } else if (animationType === "fade-right") {
-          htmlElement.style.opacity = "0";
-          htmlElement.style.transform = "translateX(-40px)";
-        }
-
-        // Animate when in view
-        inView(
-          htmlElement,
-          () => {
-            const delayStr = htmlElement.style.animationDelay;
-            const delay = delayStr ? parseFloat(delayStr) / 1000 : 0;
-
-            if (animationType === "fade-up") {
-              animate(
-                htmlElement,
-                { opacity: 1, transform: "translateY(0px)" },
-                { duration: 0.8, delay, easing: [0.17, 0.55, 0.55, 1] },
-              );
-            } else if (animationType === "fade-in") {
-              animate(
-                htmlElement,
-                { opacity: 1 },
-                { duration: 0.8, delay, easing: "ease-in-out" },
-              );
-            } else if (animationType === "zoom-in") {
-              animate(
-                htmlElement,
-                { opacity: 1, transform: "scale(1)" },
-                { duration: 0.8, delay, easing: "ease-out" },
-              );
-            } else if (animationType === "fade-right") {
-              animate(
-                htmlElement,
-                { opacity: 1, transform: "translateX(0px)" },
-                { duration: 0.8, delay, easing: "ease-out" },
-              );
+          animate(
+            el,
+            {
+              opacity: 1,
+              transform: "translateY(0px)",
+            },
+            {
+              duration: 0.8,
+              delay,
+              easing: [0.17, 0.55, 0.55, 1],
             }
-          },
-          { margin: "-50px" },
-        );
-      });
-  </script>
+          );
+        } else if (animationType === "fade-in") {
+          animate(
+            el,
+            {
+              opacity: 1,
+            },
+            {
+              duration: 0.8,
+              delay,
+              easing: "ease-in-out",
+            }
+          );
+        } else if (animationType === "zoom-in") {
+          animate(
+            el,
+            {
+              opacity: 1,
+              transform: "scale(1)",
+            },
+            {
+              duration: 0.8,
+              delay,
+              easing: "ease-out",
+            }
+          );
+        } else if (animationType === "fade-right") {
+          animate(
+            el,
+            {
+              opacity: 1,
+              transform: "translateX(0px)",
+            },
+            {
+              duration: 0.8,
+              delay,
+              easing: "ease-out",
+            }
+          );
+        }
+      },
+      {
+        margin: "-50px",
+      }
+    );
+  });
+</script>
 </Layout>
