@@ -2,23 +2,64 @@
 import '../styles.css'
 
 export interface Props {
-	title: string;
+  title: string;
 }
 
 const { title } = Astro.props;
 ---
 
 <!DOCTYPE html>
-<html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="description" content="Astro description">
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="generator" content={Astro.generator} />
-		<title>{title}</title>
-	</head>
-	<body>
-		<slot />
-	</body>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content="Astro Longform Layout">
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+  </head>
+  <body class="bg-[#f8f5f0] text-gray-800 antialiased overflow-x-hidden">
+    <header id="main-header" class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-200 shadow-sm -translate-y-full transition-transform duration-500 ease-in-out">
+      <div class="px-4 py-3 mx-auto">
+        <nav class="flex items-center">
+          <h1 class="font-bold text-lg flex items-center gap-2">
+            <a href="/" class="flex items-center gap-2 hover:opacity-80 transition-opacity">
+              <!-- Placeholder for logo -->
+              <div class="w-8 h-8 bg-red-600 rounded-sm"></div>
+              <span class="text-black inline-block">
+                <i class="font-serif italic font-medium">Longform - </i>
+                <span class="font-bold tracking-tight">Menjamu Raga ala Orang Pintar</span>
+              </span>
+            </a>
+          </h1>
+        </nav>
+      </div>
+    </header>
+    <slot />
+  </body>
 </html>
+
+  <script>
+    const header = document.getElementById('main-header');
+    const cover = document.getElementById('cover-section');
+    
+    if (header && cover) {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (!entry.isIntersecting) {
+            // Cover section is completely out of view (scrolled past it) -> Show header
+            header.classList.remove('-translate-y-full');
+          } else {
+            // Cover section is in view -> Hide header
+            header.classList.add('-translate-y-full');
+          }
+        });
+      }, { threshold: 0 }); 
+      // threshold: 0 means it reacts the moment it perfectly leaves the viewport
+      
+      observer.observe(cover);
+    } else if (header) {
+      // Fallback if no cover section exists
+      header.classList.remove('-translate-y-full');
+    }
+  </script>
