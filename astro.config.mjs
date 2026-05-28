@@ -6,10 +6,12 @@ import keystatic from '@keystatic/astro';
 
 import tailwindcss from '@tailwindcss/vite';
 
+import netlify from '@astrojs/netlify';
+
 // https://astro.build/config
 export default defineConfig({
   output: 'server',
-  adapter: node({ mode: 'standalone' }),
+  adapter: netlify(),
   integrations: [react(), markdoc(), keystatic()],
 
   vite: {

@@ -1,5 +1,8 @@
 allowBuilds:
+  '@parcel/watcher': false
   esbuild: true
   sharp: true
 minimumReleaseAgeExclude:
   - '@keystatic/astro@5.1.0'
+  - '@astrojs/internal-helpers@0.10.0'
+  - '@astrojs/netlify@7.0.11'
