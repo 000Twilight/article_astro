@@ -1,5 +1,10 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import homepage from "../content/homepage/data.json";
+
+function parseParagraphs(text: string) {
+  return (text || '').split('\n\n').filter((p) => p.trim() !== '');
+}
 ---
 
 <Layout title="Lorem Ipsum - Dolor Sit Amet Consectetur">
@@ -59,112 +64,14 @@ import Layout from "../layouts/Layout.astro";
       <div class="flex justify-center px-4">
         <div class="w-11/12 md:w-8/12 xl:w-6/12">
           <div class="text-lg md:text-xl text-gray-800 space-y-6 font-serif leading-relaxed">
-            <p data-motion="fade-up" style="animation-delay: 0ms">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi
-              finibus tellus nec ex pretium, vel finibus lorem sodales.
-            </p>
-            <p data-motion="fade-up" style="animation-delay: 150ms">
-              Vestibulum ante ipsum primis in faucibus orci luctus et ultrices
-              posuere cubilia curae; Pellentesque habitant morbi tristique
-              senectus et netus.
-            </p>
-            <p data-motion="fade-up" style="animation-delay: 300ms">
-              Aenean non accumsan ante. Aliquam elementum sodales justo ut
-              sodales.
-            </p>
-            <p data-motion="fade-up" style="animation-delay: 450ms">
-              In hac habitasse platea dictumst. Curabitur vel molestie
-              lorem. Vivamus at urna eu nisl dictum eleifend id a lorem.
-            </p>
-            <p data-motion="fade-up" style="animation-delay: 600ms" class="italic text-gray-600 pl-4 border-l-4 border-yellow-400">
-              “Lorem ipsum dolor sit amet, consectetur adipiscing elit,” dicit
-              Lorem Ipsum.
-            </p>
-            <p data-motion="fade-up" style="animation-delay: 750ms">
-              Sed eleifend lectus at nibh feugiat laoreet. Vestibulum ante ipsum
-              primis in faucibus orci luctus et ultrices posuere cubilia curae;
-            </p>
-            <p data-motion="fade-up" style="animation-delay: 900ms">
-              Nulla facilisi. Mauris vitae convallis ligula, ac efficitur diam.
-              Cras efficitur sem at finibus feugiat.
-            </p>
-            <p data-motion="fade-up" style="animation-delay: 1050ms">
-              Aliquam nec arcu facilisis, ullamcorper dolor eget, placerat magna.
-              Pellentesque non justo non risus rhoncus interdum vel sed lacus.
-            </p>
-            <p data-motion="fade-up" style="animation-delay: 1200ms">
-              Cras bibendum interdum finibus. Nullam a eleifend velit. Aliquam
-              sodales rhoncus tellus ac placerat.
-            </p>
-            <p data-motion="fade-up" style="animation-delay: 1350ms">
-              Vestibulum facilisis pretium ex, vitae placerat lectus finibus nec.
-              Nullam gravida magna sed rhoncus iaculis.
-            </p>
-            <p data-motion="fade-up" style="animation-delay: 1500ms">
-              Duis scelerisque eros eget justo hendrerit vulputate. Proin non
-              risus ac felis elementum placerat sit amet non erat.
-            </p>
-            <p data-motion="fade-up" style="animation-delay: 1650ms" class="italic text-gray-600 pl-4 border-l-4 border-yellow-400">
-              “Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
-              eleifend lectus at nibh feugiat laoreet,” dicit Placeholder.
-            </p>
-            <p data-motion="fade-up" style="animation-delay: 1800ms">
-              Nam cursus leo ac elementum tristique. Interdum et malesuada fames
-              ac ante ipsum primis in faucibus.
-            </p>
-            <p data-motion="fade-up" style="animation-delay: 1950ms">
-              Aliquam sit amet libero ac tellus condimentum rutrum. Maecenas
-              tristique est sit amet leo volutpat semper.
-            </p>
-            <p data-motion="fade-up" style="animation-delay: 2100ms">
-              Vestibulum congue feugiat varius. Suspendisse pulvinar, est sed
-              pellentesque elementum, sem leo condimentum ante, sed cursus urna
-              purus vitae ex.
-            </p>
-            <p data-motion="fade-up" style="animation-delay: 2250ms">
-              Ut eget purus a erat scelerisque placerat non pretium turpis. Donec
-              sed neque eu libero mattis elementum at id ligula.
-            </p>
-            <p data-motion="fade-up" style="animation-delay: 2400ms">
-              Phasellus pretium dictum est vel accumsan. Integer vestibulum elementum
-              tortor et pulvinar. Proin non sem tincidunt, pretium magna et,
-              ultrices augue.
-            </p>
-            <p data-motion="fade-up" style="animation-delay: 2550ms" class="italic text-gray-600 pl-4 border-l-4 border-yellow-400">
-              “Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam, quis nostrud exercitation ullamco laboris
-              nisi ut aliquip ex ea commodo consequat,” dicit Lorem.
-            </p>
-            <p data-motion="fade-up" style="animation-delay: 2700ms">
-              Praesent ac rhoncus tortor. Class aptent taciti sociosqu ad litora
-              torquent per conubia nostra, per inceptos himenaeos.
-            </p>
-            <p data-motion="fade-up" style="animation-delay: 2850ms">
-              Aenean vitae purus iaculis, sagittis ex tempor, dictum tellus. Ut
-              a tristique nunc, eget tristique ex.
-            </p>
-            <p data-motion="fade-up" style="animation-delay: 3000ms">
-              Sed imperdiet interdum elementum. Aliquam elementum, eros sit amet
-              hendrerit viverra, ante risus faucibus urna, in tempus libero
-              lacus non diam.
-            </p>
-            <p data-motion="fade-up" style="animation-delay: 3150ms">
-              Integer id magna a nisl finibus interdum et id magna. Phasellus
-              pretium accumsan ex sit amet finibus.
-            </p>
-            <p data-motion="fade-up" style="animation-delay: 3300ms">
-              Suspendisse eu odio vel sapien ultrices porttitor id ac urna. In
-              vulputate felis ut elit pretium eleifend.
-            </p>
-            <p data-motion="fade-up" style="animation-delay: 3450ms">
-              Cras vulputate varius diam, vel porta justo cursus vitae. Curabitur
-              laoreet iaculis metus, vitae posuere elit condimentum id.
-            </p>
-            <p data-motion="fade-up" style="animation-delay: 3600ms">
-              Nam id turpis nec magna fermentum suscipit ac at elit. Duis
-              scelerisque rhoncus lectus sit amet posuere.
-            </p>
+            {parseParagraphs(homepage.textSection1).map((p, i) => {
+              const isQuote = p.trim().startsWith('“') || p.trim().startsWith('"');
+              return (
+                <p data-motion="fade-up" style={`animation-delay: ${i * 150}ms`} class={isQuote ? "italic text-gray-600 pl-4 border-l-4 border-yellow-400" : ""}>
+                  {p}
+                </p>
+              );
+            })}
           </div>
         </div>
       </div>
@@ -179,7 +86,7 @@ import Layout from "../layouts/Layout.astro";
               class="text-3xl md:text-4xl font-black mb-6 text-gray-900 border-b-2 border-red-500 pb-2"
               data-motion="fade-right"
             >
-              Lorem Ipsum Dolor Sit Amet
+              {homepage.section2Title}
             </h2>
           </div>
         </div>
@@ -187,35 +94,19 @@ import Layout from "../layouts/Layout.astro";
       <div class="flex justify-center px-4">
         <div class="w-11/12 md:w-8/12 xl:w-6/12">
           <div class="text-lg md:text-xl text-gray-800 space-y-6 font-serif leading-relaxed">
-            <p data-motion="fade-left" style="animation-delay: 100ms">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. In non
-              elementum lacus, vitae ultrices est.
-            </p>
-            <p data-motion="fade-right" style="animation-delay: 200ms">
-              Quisque luctus est sit amet eros laoreet, ut cursus leo lacinia.
-              Proin scelerisque finibus diam sed efficitur.
-            </p>
-            <p data-motion="fade-left" style="animation-delay: 300ms">
-              Nullam cursus justo ac elementum pulvinar. Praesent eget urna
-              sodales, porttitor nulla sed, eleifend turpis.
-            </p>
-            <p data-motion="fade-right" style="animation-delay: 400ms">
-              Sed efficitur nisl elit, eget commodo dolor maximus vel. Ut
-              lobortis convallis ipsum eu pulvinar.
-            </p>
-            <p data-motion="fade-left" style="animation-delay: 500ms">
-              Fusce pellentesque felis eget diam sodales lobortis. Aliquam vel
-              nibh vitae diam eleifend pretium.
-            </p>
-            <p data-motion="fade-right" style="animation-delay: 600ms">
-              Suspendisse potenti. Nam accumsan ex eu tellus feugiat tristique.
-              Vivamus scelerisque sit amet diam id lacinia.
-            </p>
-            <p data-motion="fade-up" style="animation-delay: 700ms">
-              Aenean nec ex elementum, scelerisque neque aliquet, vestibulum nunc.
-              Vivamus sed erat vitae est finibus accumsan. Sed id augue dolor.
-              Sed molestie tellus ut purus rhoncus porttitor.
-            </p>
+            {parseParagraphs(homepage.textSection2).map((p, i) => {
+              // The original had an alternating pattern for fade-left, fade-right, and fade-up
+              // Let's keep it simple: alternating left-right, and last one up
+              const delays = [100, 200, 300, 400, 500, 600, 700];
+              const motions = ['fade-left', 'fade-right', 'fade-left', 'fade-right', 'fade-left', 'fade-right', 'fade-up'];
+              const motion = motions[i] || 'fade-up';
+              const delay = delays[i] || (i * 100);
+              return (
+                <p data-motion={motion} style={`animation-delay: ${delay}ms`}>
+                  {p}
+                </p>
+              );
+            })}
           </div>
         </div>
       </div>
@@ -460,98 +351,14 @@ import Layout from "../layouts/Layout.astro";
       <div class="flex justify-center px-4">
         <div class="w-11/12 md:w-8/12 xl:w-6/12">
           <div class="text-lg md:text-xl text-gray-800 space-y-6 font-serif leading-relaxed">
-            <p data-motion="fade-up" style="animation-delay: 50ms">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam
-              ut eros sit amet lorem dapibus condimentum.
-            </p>
-            <p data-motion="fade-up" style="animation-delay: 150ms">
-              Suspendisse pulvinar magna vitae arcu condimentum, feugiat fringilla magna ullamcorper.
-              Donec vulputate odio in justo pretium, non congue leo pellentesque.
-            </p>
-            <p data-motion="fade-up" style="animation-delay: 250ms">
-              Class aptent taciti sociosqu ad litora torquent per
-              conubia nostra, per inceptos himenaeos. Mauris aliquet neque
-              purus, vel varius nibh dictum ac.
-            </p>
-            <p data-motion="fade-up" style="animation-delay: 350ms">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent
-              id varius tortor, vel vehicula sem.
-            </p>
-            <p data-motion="fade-up" style="animation-delay: 450ms" class="italic text-gray-600 pl-4 border-l-4 border-red-500">
-              “Lorem ipsum dolor sit amet, consectetur adipiscing elit. In non
-              elementum lacus, vitae ultrices est. Quisque luctus est sit amet
-              eros laoreet, ut cursus leo lacinia,” dicit Lorem Ipsum.
-            </p>
-            <p data-motion="fade-up" style="animation-delay: 550ms">
-              Praesent interdum libero vitae eros iaculis sodales. Mauris
-              tincidunt ipsum eu facilisis luctus. Duis aliquet lectus sit amet
-              scelerisque gravida.
-            </p>
-            <p data-motion="fade-up" style="animation-delay: 650ms">
-              Vivamus elementum elit arcu, at efficitur purus tristique id.
-              Quisque dictum turpis quis elit scelerisque tristique.
-            </p>
-            <p data-motion="fade-up" style="animation-delay: 750ms">
-              Interdum et malesuada fames ac ante ipsum primis in faucibus. Suspendisse
-              tempor hendrerit lorem eu interdum. Proin condimentum sollicitudin
-              leo at congue.
-            </p>
-            <p data-motion="fade-up" style="animation-delay: 850ms">
-              Integer at est at mi convallis convallis vel vitae odio. Integer
-              tincidunt lacus a convallis porta. Etiam condimentum iaculis lacus
-              scelerisque varius.
-            </p>
-            <p data-motion="fade-up" style="animation-delay: 950ms">
-              Duis vulputate tortor purus, ut aliquam leo gravida eleifend. Ut
-              bibendum dictum metus vitae efficitur.
-            </p>
-            <p data-motion="fade-up" style="animation-delay: 1050ms">
-              Mauris eu dui ut nulla tempor volutpat eget ut metus. Pellentesque
-              accumsan leo rhoncus libero sodales consectetur.
-            </p>
-            <p data-motion="fade-up" style="animation-delay: 1150ms">
-              Curabitur scelerisque eros felis, non mattis tellus hendrerit et.
-              Sed pellentesque quam at dictum egestas.
-            </p>
-            <p data-motion="fade-up" style="animation-delay: 1250ms">
-              Vestibulum in finibus odio, vel molestie sem. Quisque imperdiet
-              scelerisque ex sed hendrerit. Aliquam fermentum tristique arcu
-              nec rhoncus. Aliquam erat volutpat.
-            </p>
-            <p data-motion="fade-up" style="animation-delay: 1350ms" class="italic text-gray-600 pl-4 border-l-4 border-red-500">
-              “Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua,” dicit
-              Placeholder.
-            </p>
-            <p data-motion="fade-up" style="animation-delay: 1450ms">
-              Proin ac sapien id lorem vulputate interdum vel quis erat. Mauris
-              varius pharetra leo nec lacinia. In vel dolor nisl.
-            </p>
-            <p data-motion="fade-up" style="animation-delay: 1550ms">
-              Vivamus congue justo at nulla sollicitudin, non convallis lacus elementum.
-            </p>
-            <p data-motion="fade-up" style="animation-delay: 1650ms" class="italic text-gray-600 pl-4 border-l-4 border-red-500">
-              “Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
-              eleifend lectus at nibh feugiat laoreet,” dicit Lorem Ipsum Dolor.
-            </p>
-            <p data-motion="fade-up" style="animation-delay: 1750ms">
-              Nam molestie ligula id accumsan varius. Fusce feugiat purus quis
-              ante pellentesque varius.
-            </p>
-            <p data-motion="fade-up" style="animation-delay: 1850ms">
-              Nullam congue purus sem, non imperdiet risus rhoncus ac. Mauris
-              sit amet ligula id lorem convallis cursus eu sit amet lorem.
-            </p>
-            <p data-motion="fade-up" style="animation-delay: 1950ms">
-              In hac habitasse platea dictumst. Ut lobortis, sem sit amet
-              rhoncus pretium, lectus nisl volutpat erat, eget sodales ipsum
-              tellus nec urna. Aliquam varius sollicitudin elementum.
-            </p>
-            <p data-motion="fade-up" style="animation-delay: 2050ms">
-              Mauris vestibulum risus ac velit eleifend aliquet. Integer tempor
-              erat diam, tempus accumsan sapien dictum id. Class aptent taciti
-              sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.
-            </p>
+            {parseParagraphs(homepage.textSection3).map((p, i) => {
+              const isQuote = p.trim().startsWith('“') || p.trim().startsWith('"');
+              return (
+                <p data-motion="fade-up" style={`animation-delay: ${50 + (i * 100)}ms`} class={isQuote ? "italic text-gray-600 pl-4 border-l-4 border-red-500" : ""}>
+                  {p}
+                </p>
+              );
+            })}
           </div>
         </div>
       </div>
@@ -579,43 +386,16 @@ import Layout from "../layouts/Layout.astro";
       <div class="flex justify-center px-4">
         <div class="w-11/12 md:w-8/12 xl:w-6/12">
           <div class="text-lg md:text-xl text-gray-800 space-y-6 font-serif leading-relaxed">
-            <p data-motion="fade-left" style="animation-delay: 0ms">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi
-              finibus tellus nec ex pretium, vel finibus lorem sodales. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices
-              posuere cubilia curae.
-            </p>
-            <p data-motion="fade-left" style="animation-delay: 150ms" class="pl-6 text-red-600 font-semibold">
-              “Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut enim
-              ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-              aliquip ex ea commodo consequat,” dicit Placeholder.
-            </p>
-            <p data-motion="fade-left" style="animation-delay: 300ms" class="pl-6 text-blue-600 font-semibold">
-              “Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam,” dicit Lorem Ipsum Dolor.
-            </p>
-            <p data-motion="fade-left" style="animation-delay: 450ms">
-              Pellentesque habitant morbi tristique senectus et netus et
-              malesuada fames ac turpis egestas. Donec non enim in turpis
-              pulvinar facilisis. Cras purus odio, vestibulum in vulputate at,
-              tempus viverra turpis.
-            </p>
-            <p data-motion="fade-left" style="animation-delay: 600ms">
-              In hac habitasse platea dictumst. Vivamus adipiscing nisi elit, et
-              convallis elit cursus at. Nam quis nulla. Integer malesuada. In in
-              nisi non arcu tincidunt eleifend pretium.
-            </p>
-            <p data-motion="fade-left" style="animation-delay: 750ms" class="pl-6 text-emerald-600 font-semibold">
-              “Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
-              eleifend lectus at nibh feugiat laoreet. Vestibulum ante ipsum
-              primis in faucibus orci luctus et ultrices posuere cubilia curae,”
-              dicit Ipsum.
-            </p>
-            <p data-motion="fade-left" style="animation-delay: 900ms" class="pl-6 text-stone-600 font-semibold">
-              “Lorem ipsum dolor sit amet, consectetur adipiscing elit. In non
-              elementum lacus, vitae ultrices est. Quisque luctus est sit amet
-              eros laoreet, ut cursus leo lacinia,” dicit Lorem.
-            </p>
+            {parseParagraphs(homepage.textSection4).map((p, i) => {
+              const borderColors = ["", "text-red-600 font-semibold", "text-blue-600 font-semibold", "", "", "text-emerald-600 font-semibold", "text-stone-600 font-semibold"];
+              const colorClass = borderColors[i] || "";
+              const baseClass = colorClass ? `pl-6 ${colorClass}` : "";
+              return (
+                <p data-motion="fade-left" style={`animation-delay: ${i * 150}ms`} class={baseClass}>
+                  {p}
+                </p>
+              );
+            })}
           </div>
         </div>
       </div>
@@ -627,7 +407,7 @@ import Layout from "../layouts/Layout.astro";
         <div class="w-11/12 md:w-8/12 xl:w-6/12">
           <div class="title-area">
             <h2 class="text-3xl md:text-4xl font-black mb-6" data-motion="zoom-in">
-              Lorem Ipsum Dolor Sit Amet
+              {homepage.section5Title}
             </h2>
           </div>
         </div>
@@ -635,41 +415,15 @@ import Layout from "../layouts/Layout.astro";
       <div class="flex justify-center px-4">
         <div class="w-11/12 md:w-8/12 xl:w-6/12">
           <div class="text-lg md:text-xl text-gray-800 space-y-6 font-serif leading-relaxed">
-            <p data-motion="zoom-in" style="animation-delay: 100ms">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. In non
-              elementum lacus, vitae ultrices est. Quisque luctus est sit amet
-              eros laoreet, ut cursus leo lacinia. Proin scelerisque finibus
-              diam sed efficitur.
-            </p>
-            <p data-motion="zoom-in" style="animation-delay: 200ms">
-              Nullam cursus justo ac elementum pulvinar. Praesent eget urna
-              sodales, porttitor nulla sed, eleifend turpis. Sed efficitur nisl
-              elit, eget commodo dolor maximus vel. Ut lobortis convallis ipsum
-              eu pulvinar.
-            </p>
-            <p data-motion="zoom-in" style="animation-delay: 300ms" class="font-medium bg-yellow-50 p-4 rounded-md shadow-sm border-l-4 border-yellow-500">
-              “Lorem ipsum dolor sit amet, consectetur adipiscing elit. In non
-              elementum lacus, vitae ultrices est. Quisque luctus est sit amet
-              eros laoreet, ut cursus leo lacinia.”
-            </p>
-            <p data-motion="zoom-in" style="animation-delay: 400ms">
-              “Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam, quis nostrud exercitation ullamco laboris
-              nisi ut aliquip.” dicit Placeholder.
-            </p>
-            <p data-motion="zoom-in" style="animation-delay: 500ms">
-              Fusce pellentesque felis eget diam sodales lobortis. Aliquam vel
-              nibh vitae diam eleifend pretium. Suspendisse potenti. Nam
-              accumsan ex eu tellus feugiat tristique. Vivamus scelerisque sit
-              amet diam id lacinia.
-            </p>
-            <p data-motion="zoom-in" style="animation-delay: 600ms">
-              In id imperdiet ante. Ut cursus eros diam, vel molestie turpis
-              facilisis id. Sed imperdiet convallis felis vulputate tincidunt.
-              Pellentesque id elementum diam, in egestas tortor. Sed eget
-              elementum dolor.
-            </p>
+            {parseParagraphs(homepage.textSection5).map((p, i) => {
+              const hasBg = p.trim().startsWith('“') || p.trim().startsWith('"');
+              const extraClass = hasBg && p.includes("eros laoreet") ? "font-medium bg-yellow-50 p-4 rounded-md shadow-sm border-l-4 border-yellow-500" : "";
+              return (
+                <p data-motion="zoom-in" style={`animation-delay: ${(i + 1) * 100}ms`} class={extraClass}>
+                  {p}
+                </p>
+              );
+            })}
           </div>
         </div>
       </div>
@@ -708,17 +462,11 @@ import Layout from "../layouts/Layout.astro";
       <div class="flex justify-center px-4">
         <div class="w-11/12 md:w-8/12 xl:w-6/12">
           <div class="text-lg md:text-xl text-gray-800 space-y-6 font-serif leading-relaxed">
-            <p data-motion="fade-up" style="animation-delay: 0ms">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi
-              finibus tellus nec ex pretium, vel finibus lorem sodales. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices
-              posuere cubilia curae.
-            </p>
-            <p data-motion="fade-up" style="animation-delay: 150ms">
-              Aenean non accumsan ante. Aliquam elementum sodales justo ut sodales. In hac habitasse platea dictumst. Curabitur vel molestie lorem. Vivamus at urna eu nisl dictum eleifend.
-            </p>
-            <p data-motion="fade-up" style="animation-delay: 300ms">
-              Sed eleifend lectus at nibh feugiat laoreet. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Nulla facilisi. Mauris vitae convallis ligula, ac efficitur diam.
-            </p>
+            {parseParagraphs(homepage.textSection6).map((p, i) => (
+              <p data-motion="fade-up" style={`animation-delay: ${i * 150}ms`}>
+                {p}
+              </p>
+            ))}
           </div>
         </div>
       </div>
@@ -729,7 +477,7 @@ import Layout from "../layouts/Layout.astro";
         <div class="w-11/12 md:w-8/12 xl:w-6/12">
           <div class="title-area">
             <h2 class="text-3xl md:text-4xl font-black mb-6 text-red-600" data-motion="fade-right">
-              Lorem Ipsum Dolor Sit Amet
+              {homepage.section7Title}
             </h2>
           </div>
         </div>
@@ -737,32 +485,14 @@ import Layout from "../layouts/Layout.astro";
       <div class="flex justify-center px-4">
         <div class="w-11/12 md:w-8/12 xl:w-6/12">
           <div class="text-lg md:text-xl text-gray-800 space-y-6 font-serif leading-relaxed">
-            <p data-motion="fade-left" style="animation-delay: 100ms">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras
-              purus odio, vestibulum in vulputate at, tempus viverra turpis.
-              Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
-            </p>
-            <p data-motion="fade-right" style="animation-delay: 200ms">
-              In id imperdiet ante. Ut cursus eros diam, vel molestie turpis
-              facilisis id. Sed imperdiet convallis felis vulputate tincidunt.
-              Pellentesque id elementum diam, in egestas tortor. Sed eget elementum dolor.
-            </p>
-            <p data-motion="fade-left" style="animation-delay: 300ms">
-              Phasellus eget scelerisque sem. Aliquam non iaculis eros. In
-              iaculis nibh vitae felis suscipit, ut pellentesque sem euismod.
-              Quisque placerat consequat risus id imperdiet. Mauris congue arcu a felis facilisis gravida.
-            </p>
-            <p data-motion="fade-right" style="animation-delay: 400ms">
-              Aliquam interdum nulla at ligula pretium tincidunt. Curabitur in
-              ante nisl. Praesent molestie leo lectus, id tincidunt ex scelerisque ac. Maecenas efficitur lorem at lacus luctus, non elementum turpis maximus.
-            </p>
-            <p data-motion="fade-left" style="animation-delay: 500ms">
-              Aenean nec ex elementum, scelerisque neque aliquet, vestibulum nunc. Vivamus sed erat vitae est finibus accumsan. Sed id augue dolor. Sed molestie tellus ut purus rhoncus porttitor.
-            </p>
-            <p data-motion="fade-right" style="animation-delay: 600ms">
-              Integer at est at mi convallis convallis vel vitae odio. Integer
-              tincidunt lacus a convallis porta. Etiam condimentum iaculis lacus scelerisque varius. Duis vulputate tortor purus, ut aliquam leo gravida eleifend.
-            </p>
+            {parseParagraphs(homepage.textSection7).map((p, i) => {
+              const motion = i % 2 === 0 ? "fade-left" : "fade-right";
+              return (
+                <p data-motion={motion} style={`animation-delay: ${(i + 1) * 100}ms`}>
+                  {p}
+                </p>
+              );
+            })}
           </div>
         </div>
       </div>
@@ -772,48 +502,18 @@ import Layout from "../layouts/Layout.astro";
       <div class="flex justify-center px-4">
         <div class="w-11/12 md:w-8/12 xl:w-6/12">
           <div class="text-lg md:text-xl text-gray-300 space-y-6 font-serif leading-relaxed">
-            <p data-motion="fade-up" style="animation-delay: 100ms">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras
-              purus odio, vestibulum in vulputate at, tempus viverra turpis.
-              Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
-            </p>
-            <p data-motion="fade-up" style="animation-delay: 250ms">
-              In id imperdiet ante. Ut cursus eros diam, vel molestie turpis
-              facilisis id. Sed imperdiet convallis felis vulputate tincidunt.
-              Pellentesque id elementum diam, in egestas tortor. Sed eget elementum dolor.
-            </p>
-            <p data-motion="fade-up" style="animation-delay: 400ms">
-              Phasellus eget scelerisque sem. Aliquam non iaculis eros. In
-              iaculis nibh vitae felis suscipit, ut pellentesque sem euismod.
-              Quisque placerat consequat risus id imperdiet. Mauris congue arcu a felis facilisis gravida.
-            </p>
-            <p data-motion="fade-up" style="animation-delay: 550ms">
-              Aliquam interdum nulla at ligula pretium tincidunt. Curabitur in
-              ante nisl. Praesent molestie leo lectus, id tincidunt ex scelerisque ac. Maecenas efficitur lorem at lacus luctus, non elementum turpis maximus.
-            </p>
-            <p data-motion="fade-up" style="animation-delay: 700ms">
-              Aenean nec ex elementum, scelerisque neque aliquet, vestibulum nunc. Vivamus sed erat vitae est finibus accumsan. Sed id augue dolor. Sed molestie tellus ut purus rhoncus porttitor.
-            </p>
-            <p data-motion="fade-up" style="animation-delay: 850ms">
-              Integer at est at mi convallis convallis vel vitae odio. Integer
-              tincidunt lacus a convallis porta. Etiam condimentum iaculis lacus scelerisque varius. Duis vulputate tortor purus, ut aliquam leo gravida eleifend.
-            </p>
-            <p data-motion="zoom-in" style="animation-delay: 1000ms" class="text-yellow-400 font-medium">
-              “Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam, quis nostrud exercitation ullamco laboris
-              nisi ut aliquip.” dicit Placeholder.
-            </p>
-            <p data-motion="fade-up" style="animation-delay: 1150ms">
-              Fusce pellentesque felis eget diam sodales lobortis. Aliquam vel
-              nibh vitae diam eleifend pretium. Suspendisse potenti. Nam
-              accumsan ex eu tellus feugiat tristique. Vivamus scelerisque sit amet diam id lacinia.
-            </p>
-            <p data-motion="fade-up" style="animation-delay: 1300ms">
-              In id imperdiet ante. Ut cursus eros diam, vel molestie turpis
-              facilisis id. Sed imperdiet convallis felis vulputate tincidunt.
-              Pellentesque id elementum diam, in egestas tortor. Sed eget elementum dolor.
-            </p>
+            {parseParagraphs(homepage.textSection8).map((p, i) => {
+              const isYellow = p.trim().startsWith('“') || p.trim().startsWith('"');
+              const motion = isYellow ? "zoom-in" : "fade-up";
+              const classStr = isYellow ? "text-yellow-400 font-medium" : "";
+              
+              // We'll approximate the delay math, the original was somewhat spaced out
+              return (
+                <p data-motion={motion} style={`animation-delay: ${100 + (i * 150)}ms`} class={classStr}>
+                  {p}
+                </p>
+              );
+            })}
           </div>
         </div>
       </div>
@@ -822,10 +522,11 @@ import Layout from "../layouts/Layout.astro";
     <section class="relative overflow-visible pb-20 pt-8 border-t border-gray-300 bg-gray-900 text-gray-400">
       <div class="flex justify-center px-4">
         <div class="w-11/12 md:w-8/12 xl:w-6/12 text-center text-sm">
-          <p data-motion="fade-in" style="animation-delay: 200ms">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua.
-          </p>
+          {parseParagraphs(homepage.textSection9).map((p, i) => (
+            <p data-motion="fade-in" style={`animation-delay: ${200 + (i * 100)}ms`}>
+              {p}
+            </p>
+          ))}
         </div>
       </div>
     </section>
