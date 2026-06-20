@@ -16,27 +16,7 @@ const { title, headerTitle } = Astro.props;
     <meta name="description" content="Astro Longform Layout" />
     <meta name="viewport" content="width=device-width" />
 
-    <!-- 1. The Core Widget CDN -->
-    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"
-    ></script>
-
-    <!-- 2. Force Open the Password Modal if Invite Token exists -->
-    <script is:inline>
-      if (window.netlifyIdentity) {
-        // Listen for the initial load of the widget
-        window.netlifyIdentity.on("init", (user) => {
-          // If there's an invite token in the URL, force the signup modal to open
-          if (window.location.hash && window.location.hash.includes("invite_token")) {
-            window.netlifyIdentity.open("signup");
-          }
-        });
-
-        // After they set their password and log in, kick them straight to the admin dashboard
-        window.netlifyIdentity.on("login", () => {
-          document.location.href = "/admin/index.html";
-        });
-      }
-    </script>
+    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
