@@ -7,7 +7,6 @@ node_modules/
 # build output
 dist/
 .astro/
-.keystatic/
 
 # system
 .DS_Store

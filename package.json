@@ -1,23 +1,12 @@
 {
-  "name": "@keystatic/templates-astro",
-  "version": "0.0.64",
+  "name": "article-astro",
+  "version": "1.0.0",
   "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/Thinkmill/keystatic/",
-    "directory": "templates/astro"
-  },
   "dependencies": {
-    "@astrojs/markdoc": "^1.0.5",
     "@astrojs/netlify": "^7.0.13",
     "@astrojs/node": "^10.0.5",
-    "@astrojs/react": "^5.0.5",
     "@tailwindcss/vite": "^4.3.0",
-    "@types/react": "^19.2.15",
-    "@types/react-dom": "^19.2.3",
     "astro": "^6.1.8",
-    "react": "^19.2.6",
-    "react-dom": "^19.2.6",
     "tailwindcss": "^4.3.0"
   },
   "scripts": {
