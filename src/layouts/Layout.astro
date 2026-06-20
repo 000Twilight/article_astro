@@ -18,6 +18,12 @@ const { title, headerTitle } = Astro.props;
 
     <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 
+    <script is:inline>
+      if (window.location.hash && (window.location.hash.startsWith('#invite_token=') || window.location.hash.startsWith('#recovery_token='))) {
+        window.location.href = `/admin/${window.location.hash}`;
+      }
+    </script>
+
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
