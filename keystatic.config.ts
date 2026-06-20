@@ -2,7 +2,8 @@ import { config, fields, collection, singleton } from '@keystatic/core';
 
 export default config({
   storage: {
-    kind: 'local',
+    kind: 'github',
+    repo: '000Twilight/article_astro'
   },
   singletons: {
     homepage: singleton({

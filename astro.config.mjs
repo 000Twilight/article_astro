@@ -9,10 +9,13 @@ import netlify from '@astrojs/netlify';
 
 // https://astro.build/config
 export default defineConfig({
-  output: 'server',
+  output: 'hybrid',
   adapter: netlify(),
-  integrations: [react(), markdoc(), keystatic()],
-
+  integrations: [
+    react(),
+    markdoc(),
+    keystatic()
+  ],
   vite: {
     plugins: [tailwindcss()],
   },

@@ -1,8 +1,34 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import homepage from "../content/homepage/data.json";
+import { createReader } from '@keystatic/core/reader';
+import keystaticConfig from '../../keystatic.config'; // Ensure this path is correct based on your folder structure
 
-function parseParagraphs(text: string) {
+// 1. Initialize the reader
+const reader = createReader(process.cwd(), keystaticConfig);
+
+// 2. Await the data from your GitHub-configured Keystatic singleton
+const homepageData = await reader.singletons.homepage.read();
+
+// 3. Provide a fallback object. 
+// If you clone the repo to a new environment without the content files, Keystatic returns null.
+// This prevents Astro from throwing "Cannot read properties of null" errors during build.
+const homepage = homepageData || {
+  textSection1: '',
+  section2Title: 'Lorem Ipsum Dolor Sit Amet',
+  textSection2: '',
+  textSection3: '',
+  textSection4: '',
+  section5Title: 'Lorem Ipsum Dolor Sit Amet',
+  textSection5: '',
+  textSection6: '',
+  section7Title: 'Lorem Ipsum Dolor Sit Amet',
+  textSection7: '',
+  textSection8: '',
+  textSection9: ''
+};
+
+// 4. Added type safety for null/undefined texts
+function parseParagraphs(text: string | null | undefined) {
   return (text || '').split('\n\n').filter((p) => p.trim() !== '');
 }
 ---
