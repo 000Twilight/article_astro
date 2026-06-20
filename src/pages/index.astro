@@ -1,91 +1,116 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import { createReader } from '@keystatic/core/reader';
-import keystaticConfig from '../../keystatic.config'; // Ensure this path is correct based on your folder structure
+import keystaticConfig from '../../keystatic.config';
 
-// 1. Initialize the reader
-const reader = createReader(process.cwd(), keystaticConfig);
-
-// 2. Await the data from your GitHub-configured Keystatic singleton
-const homepageData = await reader.singletons.homepage.read();
-
-// 3. Provide a fallback object. 
-// If you clone the repo to a new environment without the content files, Keystatic returns null.
-// This prevents Astro from throwing "Cannot read properties of null" errors during build.
-const homepage = homepageData || {
-  textSection1: '',
-  section2Title: 'Lorem Ipsum Dolor Sit Amet',
-  textSection2: '',
-  textSection3: '',
-  textSection4: '',
-  section5Title: 'Lorem Ipsum Dolor Sit Amet',
-  textSection5: '',
-  textSection6: '',
-  section7Title: 'Lorem Ipsum Dolor Sit Amet',
-  textSection7: '',
-  textSection8: '',
-  textSection9: ''
+// 1. Explicitly define the types so TypeScript stops complaining
+type TimelineItem = {
+  year: string;
+  text: string;
+  image: string | null;
 };
 
-// 4. Added type safety for null/undefined texts
+interface HomepageData {
+  headerTitle: string;
+  coverTitle: string;
+  coverIntro: string;
+  coverImage: string | null;
+  videoUrl: string;
+  textSection1: string;
+  section2Title: string;
+  textSection2: string;
+  timeline: TimelineItem[];
+  textSection3: string;
+  textSection4: string;
+  section5Title: string;
+  textSection5: string;
+  graphic2A: string | null;
+  graphic2B: string | null;
+  textSection6: string;
+  section7Title: string;
+  textSection7: string;
+  textSection8: string;
+  footerMessage: string;
+}
+
+// Initialize the reader
+const reader = createReader(process.cwd(), keystaticConfig);
+
+// Await the data and cast it to our new type
+const rawData = await reader.singletons.homepage.read();
+const homepageData = rawData as HomepageData | null;
+
+// Fallback data
+const homepage: HomepageData = homepageData || {
+  headerTitle: 'Tiga Cerita, Satu Realitas',
+  coverTitle: 'Tiga Cerita,\nSatu Realitas :\nCerita Pekerja Muda Hari Ini',
+  coverIntro: 'Dalam beberapa tahun terakhir, Generasi Z muncul sebagai salah satu kelompok paling dominan...',
+  coverImage: null,
+  videoUrl: 'https://www.youtube.com/embed/Q7LsgNkcDCY',
+  textSection1: '',
+  section2Title: 'Berawal dari Pilihan Tiga Pekerja Muda',
+  textSection2: '',
+  timeline: [
+    { year: '1935', text: 'Lorem ipsum dolor sit amet...', image: null },
+    { year: '1940', text: 'Curabitur vitae nunc sed velit...', image: null },
+    { year: '1951', text: 'Pellentesque habitant morbi...', image: null },
+    { year: '1975', text: 'Vulputate enim nulla aliquet...', image: null }
+  ],
+  textSection3: '',
+  textSection4: '',
+  section5Title: 'Ketika Tekanan Mencapai Puncak',
+  textSection5: '',
+  graphic2A: null,
+  graphic2B: null,
+  textSection6: '',
+  section7Title: 'Antara Daya Tahan dan Sistem Kerja',
+  textSection7: '',
+  textSection8: '',
+  footerMessage: 'Bertahan atau Pergi.\n\nPada akhirnya, pilihan untuk bertahan atau pergi menjadi bagian...'
+};
+
+// Explicitly type the filter parameters to remove the implicit 'any' errors
+const col1Items = (homepage.timeline || []).filter((_: any, i: number) => i % 2 === 0);
+const col2Items = (homepage.timeline || []).filter((_: any, i: number) => i % 2 === 1);
+
+const col1Rotations = ["-rotate-6", "-rotate-2", "-rotate-3", "-rotate-2"];
+const col2Rotations = ["rotate-6", "rotate-4", "rotate-6", "rotate-3"];
+
 function parseParagraphs(text: string | null | undefined) {
   return (text || '').split('\n\n').filter((p) => p.trim() !== '');
 }
 ---
 
-<Layout title="Lorem Ipsum - Dolor Sit Amet Consectetur">
-  <main class="pt-0">
-    <section
-      id="cover-section"
-      class="relative w-full h-[60vh] md:h-[80vh] lg:h-screen min-h-100 overflow-hidden bg-gray-200"
-    >
-      <div
-        class="absolute inset-0 flex items-center justify-center bg-gray-300"
-        data-motion="fade-in"
-      >
-        <span class="text-gray-500 font-medium" data-motion="zoom-in" style="animation-delay: 200ms"
-          >Lorem Ipsum Dolor Sit Amet Placeholder (e.g. 1920x1080)</span
-        >
+<Layout title={homepage.coverTitle.replace('\n', ' ')} headerTitle={homepage.headerTitle}>
+    <main class="pt-0">
+    <section id="cover-section" class="relative w-full h-[60vh] md:h-[80vh] lg:h-screen min-h-100 overflow-hidden bg-gray-200">
+      <div class="absolute inset-0 flex items-center justify-center bg-gray-300" data-motion="fade-in">
+        <span class="text-gray-500 font-medium" data-motion="zoom-in" style="animation-delay: 200ms">Hero Image Placeholder</span>
       </div>
     </section>
 
+    <!-- Cover Image Section -->
     <section class="py-12 md:py-20">
       <div class="flex justify-center">
         <div class="w-11/12 md:w-9/12 xl:w-7/12" data-motion="zoom-in">
           <div class="relative items-center justify-center flex p-4">
-            <div
-              class="w-full aspect-3/1 bg-gray-300 border-8 md:border-12 border-[#eccb2f] shadow-lg -rotate-2 flex items-center justify-center relative z-10"
-              data-motion="fade-right" style="animation-delay: 150ms"
-            >
-              <span class="text-gray-500 font-medium" data-motion="fade-up" style="animation-delay: 450ms"
-                >Lorem Ipsum Title Cover Image Placeholder</span
-              >
+            <div class="w-full aspect-3/1 bg-gray-300 border-8 md:border-12 border-[#eccb2f] shadow-lg -rotate-2 flex items-center justify-center relative z-10 overflow-hidden" data-motion="fade-right" style="animation-delay: 150ms">
+              {homepage.coverImage ? (
+                <img src={homepage.coverImage} alt="Cover" class="w-full h-full object-cover" />
+              ) : (
+                <span class="text-gray-500 font-medium" data-motion="fade-up" style="animation-delay: 450ms">Cover Image Placeholder</span>
+              )}
             </div>
-            <div
-              class="absolute inset-0 bg-[#eccb2f]/20 rotate-1 border-2 border-dashed border-red-500 rounded-sm"
-              data-motion="fade-in"
-              style="animation-delay: 300ms"
-            >
-            </div>
+            <div class="absolute inset-0 bg-[#eccb2f]/20 rotate-1 border-2 border-dashed border-red-500 rounded-sm" data-motion="fade-in" style="animation-delay: 300ms"></div>
           </div>
         </div>
       </div>
     </section>
 
-
+    <!-- Section 1 -->
     <section class="relative overflow-visible pb-12">
-      <div
-        class="absolute right-0 top-10 w-24 h-48 bg-yellow-200/50 rounded-l-full hidden md:block"
-        data-motion="fade-left"
-        style="animation-delay: 200ms"
-      >
-      </div>
-      <div
-        class="absolute left-0 bottom-10 w-20 h-40 bg-green-200/50 rounded-r-full hidden md:block"
-        data-motion="fade-right"
-        style="animation-delay: 400ms"
-      >
-      </div>
+      <div class="absolute right-0 top-10 w-24 h-48 bg-yellow-200/50 rounded-l-full hidden md:block" data-motion="fade-left" style="animation-delay: 200ms"></div>
+      <div class="absolute left-0 bottom-10 w-20 h-40 bg-green-200/50 rounded-r-full hidden md:block" data-motion="fade-right" style="animation-delay: 400ms"></div>
 
       <div class="flex justify-center px-4">
         <div class="w-11/12 md:w-8/12 xl:w-6/12">
@@ -103,15 +128,12 @@ function parseParagraphs(text: string | null | undefined) {
       </div>
     </section>
 
-
+    <!-- Section 2 -->
     <section class="relative overflow-visible pb-12 bg-gray-50/50 py-12">
       <div class="flex justify-center px-4 mb-8">
         <div class="w-11/12 md:w-8/12 xl:w-6/12">
           <div class="title-area">
-            <h2
-              class="text-3xl md:text-4xl font-black mb-6 text-gray-900 border-b-2 border-red-500 pb-2"
-              data-motion="fade-right"
-            >
+            <h2 class="text-3xl md:text-4xl font-black mb-6 text-gray-900 border-b-2 border-red-500 pb-2" data-motion="fade-right">
               {homepage.section2Title}
             </h2>
           </div>
@@ -121,14 +143,10 @@ function parseParagraphs(text: string | null | undefined) {
         <div class="w-11/12 md:w-8/12 xl:w-6/12">
           <div class="text-lg md:text-xl text-gray-800 space-y-6 font-serif leading-relaxed">
             {parseParagraphs(homepage.textSection2).map((p, i) => {
-              // The original had an alternating pattern for fade-left, fade-right, and fade-up
-              // Let's keep it simple: alternating left-right, and last one up
               const delays = [100, 200, 300, 400, 500, 600, 700];
               const motions = ['fade-left', 'fade-right', 'fade-left', 'fade-right', 'fade-left', 'fade-right', 'fade-up'];
-              const motion = motions[i] || 'fade-up';
-              const delay = delays[i] || (i * 100);
               return (
-                <p data-motion={motion} style={`animation-delay: ${delay}ms`}>
+                <p data-motion={motions[i] || 'fade-up'} style={`animation-delay: ${delays[i] || (i * 100)}ms`}>
                   {p}
                 </p>
               );
@@ -138,24 +156,12 @@ function parseParagraphs(text: string | null | undefined) {
       </div>
     </section>
 
+    <!-- Title & Timeline Section -->
+    <section class="py-12 md:py-20 relative overflow-hidden mt-8 mb-12 flex justify-center px-4">
+      <div class="relative w-full md:w-4/5 lg:w-[60%] max-w-4xl border-4 border-red-600 rounded-[100px] md:rounded-[150px] pt-16 md:pt-24 pb-20 md:pb-28 flex flex-col items-center z-10" data-motion="zoom-in">
+        <div class="absolute inset-2 md:inset-3 border-2 border-red-600 rounded-[90px] md:rounded-[140px] pointer-events-none z-0"></div>
 
-    <section
-      class="py-12 md:py-20 relative overflow-hidden mt-8 mb-12 flex justify-center px-4"
-    >
-      <div
-        class="relative w-full md:w-4/5 lg:w-[60%] max-w-4xl border-4 border-red-600 rounded-[100px] md:rounded-[150px] pt-16 md:pt-24 pb-20 md:pb-28 flex flex-col items-center z-10"
-        data-motion="zoom-in"
-      >
-        <div
-          class="absolute inset-2 md:inset-3 border-2 border-red-600 rounded-[90px] md:rounded-[140px] pointer-events-none z-0"
-        >
-        </div>
-
-        <div
-          class="relative z-10 px-6 md:px-12 text-center max-w-3xl"
-          data-motion="fade-up"
-          style="animation-delay: 200ms"
-        >
+        <div class="relative z-10 px-6 md:px-12 text-center max-w-3xl" data-motion="fade-up" style="animation-delay: 200ms">
           <div class="flex justify-center items-center space-x-2 mb-4">
             <span class="block w-12 h-1 bg-red-600 rounded-full"></span>
             <span class="block w-3 h-3 border-2 border-red-600 rounded-full"></span>
@@ -163,216 +169,74 @@ function parseParagraphs(text: string | null | undefined) {
           </div>
 
           <h2 class="text-4xl md:text-5xl font-serif font-black text-red-600 leading-tight mb-8">
-            Lorem Ipsum<br />Dolor Sit<br />Amet Consectetur
+            {homepage.coverTitle?.split('\n').map((line) => (
+              <>{line}<br /></>
+            ))}
           </h2>
 
           <p class="text-red-700 font-medium text-sm md:text-base leading-relaxed max-w-2xl mx-auto pb-16">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-            aliquip ex ea commodo consequat. Duis aute irure dolor in
-            reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-            pariatur.
+            {homepage.coverIntro}
           </p>
         </div>
 
+        <!-- Dynamic Timeline -->
         <div class="w-full relative flex pb-12 z-10">
-          <div
-            class="absolute left-1/2 -translate-x-1/2 top-0 bottom-12 md:bottom-20 w-1 bg-red-600 z-0"
-            data-motion="fade-in"
-            style="animation-delay: 400ms"
-          >
-          </div>
+          <div class="absolute left-1/2 -translate-x-1/2 top-0 bottom-12 md:bottom-20 w-1 bg-red-600 z-0" data-motion="fade-in" style="animation-delay: 400ms"></div>
 
+          <!-- Column 1 (Left visually, Right aligned) -->
           <div class="w-1/2 flex flex-col items-end gap-y-16 md:gap-y-24">
-            <div
-              class="flex flex-col items-center w-full sm:w-11/12 max-w-[320px] md:max-w-[380px]"
-              data-motion="fade-right"
-              style="animation-delay: 100ms"
-            >
-              <div class="relative w-full max-w-[260px] h-40 md:h-56 mb-6 flex justify-center items-center">
-                <div class="absolute z-20 w-32 md:w-40 aspect-video bg-gray-200 border-[4px] md:border-[6px] border-[#eccb2f] -rotate-6 shadow-md -translate-x-6 -translate-y-4 flex items-center justify-center">
-                  <span class="text-[10px] md:text-xs text-gray-500 font-medium">Image</span>
+            {col1Items.map((item, index) => {
+              const rotation = col1Rotations[index % col1Rotations.length];
+              return (
+                <div class="flex flex-col items-center w-full sm:w-11/12 max-w-[320px] md:max-w-[380px]" data-motion="fade-right" style={`animation-delay: ${100 + (index * 200)}ms`}>
+                  <div class="relative w-full max-w-[260px] h-40 md:h-56 mb-6 flex justify-center items-center">
+                    <div class={`absolute z-20 w-40 md:w-48 aspect-[4/3] bg-gray-300 border-[4px] md:border-[6px] border-[#eccb2f] ${rotation} shadow-lg flex items-center justify-center overflow-hidden`}>
+                      {item.image ? <img src={item.image} alt={item.year} class="w-full h-full object-cover" /> : <span class="text-[10px] md:text-xs text-gray-600 font-medium text-center">Image</span>}
+                    </div>
+                  </div>
+                  <div class="flex w-full items-center">
+                    <div class="flex-1"></div>
+                    <h3 class="text-3xl md:text-4xl font-black text-red-600 tracking-tight px-4 md:px-6">{item.year}</h3>
+                    <div class="flex-1 h-1 bg-red-600 z-10"></div>
+                  </div>
+                  <div class="w-3 md:w-4 h-3 md:h-4 bg-red-600 rounded-full mt-2 mb-4"></div>
+                  <div class="text-center px-4 space-y-3 text-sm md:text-base font-medium text-gray-900 leading-snug">
+                    <p>{item.text}</p>
+                  </div>
                 </div>
-                <div class="absolute z-30 w-36 md:w-44 aspect-video bg-gray-300 border-[4px] md:border-[6px] border-[#eccb2f] rotate-3 shadow-lg translate-x-6 translate-y-4 flex items-center justify-center">
-                  <span class="text-[10px] md:text-xs text-gray-600 font-medium">Image</span>
-                </div>
-                <div class="absolute bottom-2 -left-2 w-12 h-12 bg-green-500 rounded-tl-full rounded-br-full -rotate-15 opacity-80 z-10 shadow-inner"></div>
-              </div>
-              <div class="flex w-full items-center">
-                <div class="flex-1"></div>
-                <h3 class="text-3xl md:text-4xl font-black text-red-600 tracking-tight px-4 md:px-6">1935</h3>
-                <div class="flex-1 h-1 bg-red-600 z-10"></div>
-              </div>
-              <div class="w-3 md:w-4 h-3 md:h-4 bg-red-600 rounded-full mt-2 mb-4"></div>
-              <div class="text-center px-4 space-y-3 text-sm md:text-base font-medium text-gray-900 leading-snug">
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris commodo quis imperdiet massa condimentum.</p>
-              </div>
-            </div>
-
-            <div
-              class="flex flex-col items-center w-full sm:w-11/12 max-w-[320px] md:max-w-[380px]"
-              data-motion="fade-right"
-              style="animation-delay: 300ms"
-            >
-              <div class="relative w-full max-w-[260px] h-40 md:h-56 mb-6 flex justify-center items-center">
-                <div class="absolute z-20 w-40 md:w-48 aspect-[4/3] bg-gray-300 border-[4px] md:border-[6px] border-[#eccb2f] -rotate-2 shadow-lg flex items-center justify-center">
-                  <span class="text-[10px] md:text-xs text-gray-600 font-medium text-center">Image</span>
-                </div>
-              </div>
-              <div class="flex w-full items-center">
-                <div class="flex-1"></div>
-                <h3 class="text-3xl md:text-4xl font-black text-red-600 tracking-tight px-4 md:px-6">1951</h3>
-                <div class="flex-1 h-1 bg-red-600 z-10"></div>
-              </div>
-              <div class="w-3 md:w-4 h-3 md:h-4 bg-red-600 rounded-full mt-2 mb-4"></div>
-              <div class="text-center px-4 space-y-3 text-sm md:text-base font-medium text-gray-900 leading-snug">
-                <p>Pellentesque habitant morbi tristique senectus et netus et malesuada. Fermentum leo vel orci porta non pulvinar.</p>
-              </div>
-            </div>
-
-            <div
-              class="flex flex-col items-center w-full sm:w-11/12 max-w-[320px] md:max-w-[380px]"
-              data-motion="fade-right"
-              style="animation-delay: 500ms"
-            >
-              <div class="relative w-full max-w-[260px] h-40 md:h-56 mb-6 flex justify-center items-center">
-                <div class="absolute z-20 w-40 md:w-48 aspect-[4/3] bg-gray-300 border-[4px] md:border-[6px] border-[#eccb2f] -rotate-3 shadow-lg flex items-center justify-center">
-                  <span class="text-[10px] md:text-xs text-gray-600 font-medium">Image</span>
-                </div>
-              </div>
-              <div class="flex w-full items-center">
-                <div class="flex-1"></div>
-                <h3 class="text-3xl md:text-4xl font-black text-red-600 tracking-tight px-4 md:px-6">1997</h3>
-                <div class="flex-1 h-1 bg-red-600 z-10"></div>
-              </div>
-              <div class="w-3 md:w-4 h-3 md:h-4 bg-red-600 rounded-full mt-2 mb-4"></div>
-              <div class="text-center px-4 space-y-3 text-sm md:text-base font-medium text-gray-900 leading-snug">
-                <p>Feugiat in ante metus dictum at tempor. Et ligula ullamcorper malesuada proin libero nunc consequat.</p>
-              </div>
-            </div>
-
-            <div
-              class="flex flex-col items-center w-full sm:w-11/12 max-w-[320px] md:max-w-[380px]"
-              data-motion="fade-right"
-              style="animation-delay: 700ms"
-            >
-              <div class="relative w-full max-w-[260px] h-40 md:h-56 mb-6 flex justify-center items-center">
-                <div class="absolute z-20 w-40 md:w-48 aspect-video bg-gray-300 border-[4px] md:border-[6px] border-[#eccb2f] -rotate-2 shadow-lg flex items-center justify-center">
-                  <span class="text-[10px] md:text-xs text-gray-600 font-medium">Image</span>
-                </div>
-              </div>
-              <div class="flex w-full items-center">
-                <div class="flex-1"></div>
-                <h3 class="text-3xl md:text-4xl font-black text-red-600 tracking-tight px-4 md:px-6">2023</h3>
-                <div class="flex-1 h-1 bg-red-600 z-10"></div>
-              </div>
-              <div class="w-3 md:w-4 h-3 md:h-4 bg-red-600 rounded-full mt-2 mb-4"></div>
-              <div class="text-center px-4 space-y-3 text-sm md:text-base font-medium text-gray-900 leading-snug">
-                <p>Ullamcorper dignissim cras tincidunt lobortis. Faucibus scelerisque eleifend donec pretium vulputate lorem sed.</p>
-              </div>
-            </div>
+              );
+            })}
           </div>
 
+          <!-- Column 2 (Right visually, Left aligned) -->
           <div class="w-1/2 flex flex-col items-start gap-y-16 md:gap-y-24 pt-[14rem] md:pt-[20rem]">
-            <div
-              class="flex flex-col items-center w-full sm:w-11/12 max-w-[320px] md:max-w-[380px]"
-              data-motion="fade-left"
-              style="animation-delay: 200ms"
-            >
-              <div class="relative w-full max-w-[260px] h-40 md:h-56 mb-6 flex justify-center items-center">
-                <div class="absolute z-20 w-36 md:w-44 aspect-video bg-gray-300 border-[4px] md:border-[6px] border-[#eccb2f] rotate-6 shadow-md translate-x-4 -translate-y-4 flex items-center justify-center">
-                  <span class="text-[10px] md:text-xs text-gray-600 font-medium">Image</span>
+            {col2Items.map((item, index) => {
+              const rotation = col2Rotations[index % col2Rotations.length];
+              return (
+                <div class="flex flex-col items-center w-full sm:w-11/12 max-w-[320px] md:max-w-[380px]" data-motion="fade-left" style={`animation-delay: ${200 + (index * 200)}ms`}>
+                  <div class="relative w-full max-w-[260px] h-40 md:h-56 mb-6 flex justify-center items-center">
+                    <div class={`absolute z-20 w-40 md:w-48 aspect-[4/3] bg-gray-300 border-[4px] md:border-[6px] border-[#eccb2f] ${rotation} shadow-lg flex items-center justify-center overflow-hidden`}>
+                      {item.image ? <img src={item.image} alt={item.year} class="w-full h-full object-cover" /> : <span class="text-[10px] md:text-xs text-gray-600 font-medium text-center">Image</span>}
+                    </div>
+                  </div>
+                  <div class="flex w-full items-center">
+                    <div class="flex-1 h-1 bg-red-600 z-10"></div>
+                    <h3 class="text-3xl md:text-4xl font-black text-red-600 tracking-tight px-4 md:px-6">{item.year}</h3>
+                    <div class="flex-1"></div>
+                  </div>
+                  <div class="w-3 md:w-4 h-3 md:h-4 bg-red-600 rounded-full mt-2 mb-4"></div>
+                  <div class="text-center px-4 space-y-3 text-sm md:text-base font-medium text-gray-900 leading-snug">
+                    <p>{item.text}</p>
+                  </div>
                 </div>
-                <div class="absolute z-30 w-28 md:w-36 aspect-square bg-gray-200 border-[4px] md:border-[6px] border-[#eccb2f] -rotate-3 shadow-xl -translate-x-6 translate-y-6 flex items-center justify-center">
-                  <span class="text-[10px] md:text-xs text-gray-500 font-medium">Image</span>
-                </div>
-              </div>
-              <div class="flex w-full items-center">
-                <div class="flex-1 h-1 bg-red-600 z-10"></div>
-                <h3 class="text-3xl md:text-4xl font-black text-red-600 tracking-tight px-4 md:px-6">1940</h3>
-                <div class="flex-1"></div>
-              </div>
-              <div class="w-3 md:w-4 h-3 md:h-4 bg-red-600 rounded-full mt-2 mb-4"></div>
-              <div class="text-center px-4 space-y-3 text-sm md:text-base font-medium text-gray-900 leading-snug">
-                <p>Curabitur vitae nunc sed velit dignissim sodales ut eu. Elementum sagittis vitae et leo duis ut diam ultricies.</p>
-              </div>
-            </div>
-
-            <div
-              class="flex flex-col items-center w-full sm:w-11/12 max-w-[320px] md:max-w-[380px]"
-              data-motion="fade-left"
-              style="animation-delay: 400ms"
-            >
-              <div class="relative w-full max-w-[260px] h-40 md:h-56 mb-6 flex justify-center items-center">
-                <div class="absolute z-20 w-40 md:w-48 aspect-video bg-gray-300 border-[4px] md:border-[6px] border-[#eccb2f] rotate-4 shadow-md translate-x-2 -translate-y-2 flex items-center justify-center">
-                  <span class="text-[10px] md:text-xs text-gray-600 font-medium text-center">Image</span>
-                </div>
-              </div>
-              <div class="flex w-full items-center">
-                <div class="flex-1 h-1 bg-red-600 z-10"></div>
-                <h3 class="text-3xl md:text-4xl font-black text-red-600 tracking-tight px-4 md:px-6">1975</h3>
-                <div class="flex-1"></div>
-              </div>
-              <div class="w-3 md:w-4 h-3 md:h-4 bg-red-600 rounded-full mt-2 mb-4"></div>
-              <div class="text-center px-4 space-y-3 text-sm md:text-base font-medium text-gray-900 leading-snug">
-                <p>Vulputate enim nulla aliquet porttitor. Sed augue lacus viverra vitae congue eu consequat ac felis eu.</p>
-              </div>
-            </div>
-
-            <div
-              class="flex flex-col items-center w-full sm:w-11/12 max-w-[320px] md:max-w-[380px]"
-              data-motion="fade-left"
-              style="animation-delay: 600ms"
-            >
-              <div class="relative w-full max-w-[260px] h-40 md:h-56 mb-6 flex justify-center items-center">
-                <div class="absolute z-20 w-36 md:w-44 aspect-video bg-gray-300 border-[4px] md:border-[6px] border-[#eccb2f] rotate-6 shadow-md translate-x-4 -translate-y-4 flex items-center justify-center">
-                  <span class="text-[10px] md:text-xs text-gray-600 font-medium">Image</span>
-                </div>
-                <div class="absolute z-30 w-36 md:w-44 aspect-video bg-gray-200 border-[4px] md:border-[6px] border-[#eccb2f] -rotate-3 shadow-xl -translate-x-4 translate-y-6 flex items-center justify-center">
-                  <span class="text-[10px] md:text-xs text-gray-500 font-medium">Image</span>
-                </div>
-              </div>
-              <div class="flex w-full items-center">
-                <div class="flex-1 h-1 bg-red-600 z-10"></div>
-                <h3 class="text-3xl md:text-4xl font-black text-red-600 tracking-tight px-4 md:px-6">2000</h3>
-                <div class="flex-1"></div>
-              </div>
-              <div class="w-3 md:w-4 h-3 md:h-4 bg-red-600 rounded-full mt-2 mb-4"></div>
-              <div class="text-center px-4 space-y-3 text-sm md:text-base font-medium text-gray-900 leading-snug">
-                <p>Tortor at auctor urna nunc id cursus metus. Cursus risus at ultrices mi tempus imperdiet nulla malesuada.</p>
-              </div>
-            </div>
-
-            <div
-              class="flex flex-col items-center w-full sm:w-11/12 max-w-[320px] md:max-w-[380px]"
-              data-motion="fade-left"
-              style="animation-delay: 800ms"
-            >
-              <div class="relative w-full max-w-[260px] h-40 md:h-56 mb-6 flex justify-center items-center">
-                <div class="absolute z-20 w-36 md:w-44 aspect-video bg-gray-300 border-[4px] md:border-[6px] border-[#eccb2f] rotate-3 shadow-md translate-x-2 -translate-y-4 flex items-center justify-center">
-                  <span class="text-[10px] md:text-xs text-gray-600 font-medium">Image</span>
-                </div>
-                <div class="absolute z-30 w-36 md:w-44 aspect-video bg-gray-200 border-[4px] md:border-[6px] border-[#eccb2f] -rotate-4 shadow-xl -translate-x-4 translate-y-6 flex items-center justify-center">
-                  <span class="text-[10px] md:text-xs text-gray-500 font-medium">Image</span>
-                </div>
-              </div>
-              <div class="flex w-full items-center">
-                <div class="flex-1 h-1 bg-red-600 z-10"></div>
-                <h3 class="text-3xl md:text-4xl font-black text-red-600 tracking-tight px-4 md:px-6">2024</h3>
-                <div class="flex-1"></div>
-              </div>
-              <div class="w-3 md:w-4 h-3 md:h-4 bg-red-600 rounded-full mt-2 mb-4"></div>
-              <div class="text-center px-4 space-y-3 text-sm md:text-base font-medium text-gray-900 leading-snug">
-                <p>Pharetra vel turpis nunc eget lorem dolor sed viverra ipsum. Volutpat odio facilisis mauris sit amet massa.</p>
-              </div>
-            </div>
+              );
+            })}
           </div>
         </div>
       </div>
     </section>
 
-
+    <!-- Section 3 -->
     <section class="relative overflow-visible pb-12">
       <div class="flex justify-center px-4">
         <div class="w-11/12 md:w-8/12 xl:w-6/12">
@@ -390,16 +254,19 @@ function parseParagraphs(text: string | null | undefined) {
       </div>
     </section>
 
-
+    <!-- YouTube Video Section -->
     <section class="py-8 md:py-16 relative">
       <div class="flex justify-center px-4">
         <div class="w-full md:w-10/12" data-motion="zoom-in">
           <div class="relative w-full aspect-video flex items-center justify-center overflow-visible p-4 md:p-8">
             <div class="w-full h-full bg-gray-800 border-8 md:border-16 border-[#eccb2f] shadow-2xl rotate-1 flex items-center justify-center group relative overflow-hidden z-10 hover:rotate-0 transition-transform duration-500">
-              <div class="w-16 h-16 md:w-24 md:h-24 bg-white/90 rounded-full flex items-center justify-center z-20 group-hover:scale-110 transition-transform cursor-pointer shadow-lg">
-                <div class="ml-2 w-0 h-0 border-t-10 border-t-transparent border-l-16 border-l-red-600 border-b-10 border-b-transparent md:border-t-14 md:border-l-24 md:border-b-14"></div>
-              </div>
-              <span class="absolute bottom-4 right-4 text-white/50 font-medium text-sm z-20">Lorem Ipsum Video Placeholder</span>
+              {homepage.videoUrl ? (
+                <iframe class="w-full h-full absolute inset-0 z-20" src={homepage.videoUrl} title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+              ) : (
+                <div class="w-16 h-16 md:w-24 md:h-24 bg-white/90 rounded-full flex items-center justify-center z-20 group-hover:scale-110 transition-transform cursor-pointer shadow-lg">
+                  <div class="ml-2 w-0 h-0 border-t-10 border-t-transparent border-l-16 border-l-red-600 border-b-10 border-b-transparent md:border-t-14 md:border-l-24 md:border-b-14"></div>
+                </div>
+              )}
             </div>
             <div class="absolute inset-4 md:inset-8 bg-[#eccb2f]/30 -rotate-2 rounded z-0" data-motion="fade-in" style="animation-delay: 300ms"></div>
           </div>
@@ -407,17 +274,15 @@ function parseParagraphs(text: string | null | undefined) {
       </div>
     </section>
 
-
+    <!-- Section 4 -->
     <section class="relative overflow-visible pb-12 bg-stone-50 py-8">
       <div class="flex justify-center px-4">
         <div class="w-11/12 md:w-8/12 xl:w-6/12">
           <div class="text-lg md:text-xl text-gray-800 space-y-6 font-serif leading-relaxed">
             {parseParagraphs(homepage.textSection4).map((p, i) => {
               const borderColors = ["", "text-red-600 font-semibold", "text-blue-600 font-semibold", "", "", "text-emerald-600 font-semibold", "text-stone-600 font-semibold"];
-              const colorClass = borderColors[i] || "";
-              const baseClass = colorClass ? `pl-6 ${colorClass}` : "";
               return (
-                <p data-motion="fade-left" style={`animation-delay: ${i * 150}ms`} class={baseClass}>
+                <p data-motion="fade-left" style={`animation-delay: ${i * 150}ms`} class={borderColors[i] ? `pl-6 ${borderColors[i]}` : ""}>
                   {p}
                 </p>
               );
@@ -427,14 +292,12 @@ function parseParagraphs(text: string | null | undefined) {
       </div>
     </section>
 
-
+    <!-- Section 5 -->
     <section class="relative overflow-visible pb-12 pt-8">
       <div class="flex justify-center px-4 mb-8">
         <div class="w-11/12 md:w-8/12 xl:w-6/12">
           <div class="title-area">
-            <h2 class="text-3xl md:text-4xl font-black mb-6" data-motion="zoom-in">
-              {homepage.section5Title}
-            </h2>
+            <h2 class="text-3xl md:text-4xl font-black mb-6" data-motion="zoom-in">{homepage.section5Title}</h2>
           </div>
         </div>
       </div>
@@ -444,18 +307,14 @@ function parseParagraphs(text: string | null | undefined) {
             {parseParagraphs(homepage.textSection5).map((p, i) => {
               const hasBg = p.trim().startsWith('“') || p.trim().startsWith('"');
               const extraClass = hasBg && p.includes("eros laoreet") ? "font-medium bg-yellow-50 p-4 rounded-md shadow-sm border-l-4 border-yellow-500" : "";
-              return (
-                <p data-motion="zoom-in" style={`animation-delay: ${(i + 1) * 100}ms`} class={extraClass}>
-                  {p}
-                </p>
-              );
+              return <p data-motion="zoom-in" style={`animation-delay: ${(i + 1) * 100}ms`} class={extraClass}>{p}</p>;
             })}
           </div>
         </div>
       </div>
     </section>
 
-
+    <!-- Graphic Placeholders Section -->
     <section class="py-8 md:py-16 relative bg-zinc-100/60 overflow-hidden">
       <div class="flex justify-center px-4">
         <div class="w-full md:w-10/12">
@@ -463,79 +322,70 @@ function parseParagraphs(text: string | null | undefined) {
             <div class="absolute w-64 h-64 md:w-125 md:h-125 bg-yellow-100 rounded-full flex items-center justify-center z-0 animate-pulse"></div>
             <div class="absolute bottom-20 left-10 w-24 h-24 md:w-32 md:h-32 bg-green-500 rounded-tl-full rounded-br-full rotate-15 opacity-70 z-0"></div>
 
-            <div
-              class="absolute w-56 md:w-96 aspect-4/3 bg-gray-300 border-8 md:border-12 border-[#eccb2f] shadow-lg rotate-4 translate-x-12 translate-y-10 md:translate-x-20 md:translate-y-16 flex items-center justify-center z-10 transition-transform duration-300 hover:scale-105 hover:-rotate-2 hover:z-40 cursor-pointer"
-              data-motion="fade-left"
-              style="animation-delay: 200ms"
-            >
-              <span class="text-gray-500 font-medium text-xs md:text-sm text-center px-2">Graphic Placeholder Lorem Ipsum 2A</span>
+            <!-- Graphic 2A -->
+            <div class="absolute w-56 md:w-96 aspect-4/3 bg-gray-300 border-8 md:border-12 border-[#eccb2f] shadow-lg rotate-4 translate-x-12 translate-y-10 md:translate-x-20 md:translate-y-16 flex items-center justify-center z-10 transition-transform duration-300 hover:scale-105 hover:-rotate-2 hover:z-40 cursor-pointer overflow-hidden" data-motion="fade-left" style="animation-delay: 200ms">
+              {homepage.graphic2A ? (
+                <img src={homepage.graphic2A} alt="Graphic 2A" class="w-full h-full object-cover" />
+              ) : (
+                <span class="text-gray-500 font-medium text-xs md:text-sm text-center px-2">Graphic Placeholder 2A</span>
+              )}
             </div>
 
-            <div
-              class="absolute w-52 md:w-80 aspect-3/4 bg-gray-400 border-8 md:border-12 border-[#eccb2f] shadow-2xl -rotate-4 -translate-x-16 -translate-y-4 md:-translate-x-28 md:-translate-y-8 flex items-center justify-center z-20 transition-transform duration-300 hover:scale-105 hover:rotate-2 hover:z-40 cursor-pointer"
-              data-motion="fade-right"
-              style="animation-delay: 400ms"
-            >
-              <span class="text-gray-700 font-medium text-xs md:text-sm text-center px-2">Graphic Placeholder Lorem Ipsum 2B</span>
+            <!-- Graphic 2B -->
+            <div class="absolute w-52 md:w-80 aspect-3/4 bg-gray-400 border-8 md:border-12 border-[#eccb2f] shadow-2xl -rotate-4 -translate-x-16 -translate-y-4 md:-translate-x-28 md:-translate-y-8 flex items-center justify-center z-20 transition-transform duration-300 hover:scale-105 hover:rotate-2 hover:z-40 cursor-pointer overflow-hidden" data-motion="fade-right" style="animation-delay: 400ms">
+              {homepage.graphic2B ? (
+                <img src={homepage.graphic2B} alt="Graphic 2B" class="w-full h-full object-cover" />
+              ) : (
+                <span class="text-gray-700 font-medium text-xs md:text-sm text-center px-2">Graphic Placeholder 2B</span>
+              )}
             </div>
           </div>
         </div>
       </div>
     </section>
 
-
+    <!-- Section 6 -->
     <section class="relative overflow-visible py-12">
       <div class="flex justify-center px-4">
         <div class="w-11/12 md:w-8/12 xl:w-6/12">
           <div class="text-lg md:text-xl text-gray-800 space-y-6 font-serif leading-relaxed">
             {parseParagraphs(homepage.textSection6).map((p, i) => (
-              <p data-motion="fade-up" style={`animation-delay: ${i * 150}ms`}>
-                {p}
-              </p>
+              <p data-motion="fade-up" style={`animation-delay: ${i * 150}ms`}>{p}</p>
             ))}
           </div>
         </div>
       </div>
     </section>
 
+    <!-- Section 7 -->
     <section class="relative overflow-visible pb-12">
       <div class="flex justify-center px-4 mb-8">
         <div class="w-11/12 md:w-8/12 xl:w-6/12">
           <div class="title-area">
-            <h2 class="text-3xl md:text-4xl font-black mb-6 text-red-600" data-motion="fade-right">
-              {homepage.section7Title}
-            </h2>
+            <h2 class="text-3xl md:text-4xl font-black mb-6 text-red-600" data-motion="fade-right">{homepage.section7Title}</h2>
           </div>
         </div>
       </div>
       <div class="flex justify-center px-4">
         <div class="w-11/12 md:w-8/12 xl:w-6/12">
           <div class="text-lg md:text-xl text-gray-800 space-y-6 font-serif leading-relaxed">
-            {parseParagraphs(homepage.textSection7).map((p, i) => {
-              const motion = i % 2 === 0 ? "fade-left" : "fade-right";
-              return (
-                <p data-motion={motion} style={`animation-delay: ${(i + 1) * 100}ms`}>
-                  {p}
-                </p>
-              );
-            })}
+            {parseParagraphs(homepage.textSection7).map((p, i) => (
+              <p data-motion={i % 2 === 0 ? "fade-left" : "fade-right"} style={`animation-delay: ${(i + 1) * 100}ms`}>{p}</p>
+            ))}
           </div>
         </div>
       </div>
     </section>
 
+    <!-- Section 8 (Dark) -->
     <section class="relative overflow-visible pb-12 bg-gray-900 text-white py-16 rounded-t-[50px]">
       <div class="flex justify-center px-4">
         <div class="w-11/12 md:w-8/12 xl:w-6/12">
           <div class="text-lg md:text-xl text-gray-300 space-y-6 font-serif leading-relaxed">
             {parseParagraphs(homepage.textSection8).map((p, i) => {
               const isYellow = p.trim().startsWith('“') || p.trim().startsWith('"');
-              const motion = isYellow ? "zoom-in" : "fade-up";
-              const classStr = isYellow ? "text-yellow-400 font-medium" : "";
-              
-              // We'll approximate the delay math, the original was somewhat spaced out
               return (
-                <p data-motion={motion} style={`animation-delay: ${100 + (i * 150)}ms`} class={classStr}>
+                <p data-motion={isYellow ? "zoom-in" : "fade-up"} style={`animation-delay: ${100 + (i * 150)}ms`} class={isYellow ? "text-yellow-400 font-medium" : ""}>
                   {p}
                 </p>
               );
@@ -545,117 +395,63 @@ function parseParagraphs(text: string | null | undefined) {
       </div>
     </section>
 
+    <!-- Footer Message -->
     <section class="relative overflow-visible pb-20 pt-8 border-t border-gray-300 bg-gray-900 text-gray-400">
       <div class="flex justify-center px-4">
-        <div class="w-11/12 md:w-8/12 xl:w-6/12 text-center text-sm">
-          {parseParagraphs(homepage.textSection9).map((p, i) => (
-            <p data-motion="fade-in" style={`animation-delay: ${200 + (i * 100)}ms`}>
-              {p}
-            </p>
+        <div class="w-11/12 md:w-8/12 xl:w-6/12 text-center text-sm space-y-4">
+          {parseParagraphs(homepage.footerMessage).map((p, i) => (
+            <p data-motion="fade-in" style={`animation-delay: ${200 + (i * 100)}ms`}>{p}</p>
           ))}
         </div>
       </div>
     </section>
   </main>
 
-  <!-- Scroll to Top Button -->
-  <button 
-    id="scrollToTopBtn" 
-    class="fixed bottom-8 right-8 w-14 h-14 bg-red-600 text-white rounded-full shadow-lg flex items-center justify-center hover:bg-red-700 hover:-translate-y-1 transition-all duration-300 z-50 opacity-0 translate-y-4 pointer-events-none"
-    aria-label="Scroll to top"
-  >
+  <button id="scrollToTopBtn" class="fixed bottom-8 right-8 w-14 h-14 bg-red-600 text-white rounded-full shadow-lg flex items-center justify-center hover:bg-red-700 hover:-translate-y-1 transition-all duration-300 z-50 opacity-0 translate-y-4 pointer-events-none" aria-label="Scroll to top">
     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
       <path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7" />
     </svg>
   </button>
 
   <style is:global>
-    [data-motion] {
-      opacity: 0;
-      transition-duration: 0.5s;
-      /* If you want to prevent clicking before it's visible, you can add pointer-events: none; */
-    }
-    
-    [data-motion="fade-in"] {
-      transition-property: opacity;
-      transition-timing-function: ease-in-out;
-    }
-    
-    [data-motion="fade-up"] {
-      transform: translateY(40px);
-      transition-property: opacity, transform;
-      transition-timing-function: cubic-bezier(0.17, 0.55, 0.55, 1);
-    }
-    
-    [data-motion="fade-left"] {
-      transform: translateX(40px);
-      transition-property: opacity, transform;
-      transition-timing-function: ease-out;
-    }
-    
-    [data-motion="fade-right"] {
-      transform: translateX(-40px);
-      transition-property: opacity, transform;
-      transition-timing-function: ease-out;
-    }
-    
-    [data-motion="zoom-in"] {
-      transform: scale(0.9);
-      transition-property: opacity, transform;
-      transition-timing-function: ease-out;
-    }
-
-    [data-motion].is-visible {
-      opacity: 1;
-      transform: none;
-    }
+    [data-motion] { opacity: 0; transition-duration: 0.5s; }
+    [data-motion="fade-in"] { transition-property: opacity; transition-timing-function: ease-in-out; }
+    [data-motion="fade-up"] { transform: translateY(40px); transition-property: opacity, transform; transition-timing-function: cubic-bezier(0.17, 0.55, 0.55, 1); }
+    [data-motion="fade-left"] { transform: translateX(40px); transition-property: opacity, transform; transition-timing-function: ease-out; }
+    [data-motion="fade-right"] { transform: translateX(-40px); transition-property: opacity, transform; transition-timing-function: ease-out; }
+    [data-motion="zoom-in"] { transform: scale(0.9); transition-property: opacity, transform; transition-timing-function: ease-out; }
+    [data-motion].is-visible { opacity: 1; transform: none; }
   </style>
 
   <script>
     document.addEventListener("DOMContentLoaded", () => {
-      const observer = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            const el = entry.target as HTMLElement;
-            if (entry.isIntersecting) {
-              // Apply the stagger delay when it enters the viewport
-              if (el.dataset.delay) {
-                el.style.transitionDelay = el.dataset.delay;
-              }
-              el.classList.add("is-visible");
-            } else {
-              // Only remove the class if the element leaves via the bottom of the viewport
-              // (i.e., you scroll up past it). If it leaves via the top, we leave it visible.
-              if (entry.boundingClientRect.top > 0) {
-                el.style.transitionDelay = "0ms";
-                el.classList.remove("is-visible");
-              }
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          const el = entry.target as HTMLElement;
+          if (entry.isIntersecting) {
+            if (el.dataset.delay) el.style.transitionDelay = el.dataset.delay;
+            el.classList.add("is-visible");
+          } else {
+            if (entry.boundingClientRect.top > 0) {
+              el.style.transitionDelay = "0ms";
+              el.classList.remove("is-visible");
             }
-          });
-        },
-        // Trigger slightly earlier to keep up with scrolling 
-        { rootMargin: "0px 0px 50px 0px", threshold: 0 }
-      );
+          }
+        });
+      }, { rootMargin: "0px 0px 50px 0px", threshold: 0 });
 
       document.querySelectorAll("[data-motion]").forEach((htmlElement) => {
         const el = htmlElement as HTMLElement;
-        
-        // Save the delay to a robust dataset property instead of keeping it permanent
         if (el.style.animationDelay) {
-          // Some inline staggered delays were up to 3600ms, making them wait 3.6s!
-          // We compress that wait time drastically so it feels snappy and keeps up.
           const ms = parseInt(el.style.animationDelay, 10);
           el.dataset.delay = `${ms * 0.25}ms`;
         }
-        
         observer.observe(el);
       });
 
-      // Scroll to Top Button Logic
       const scrollToTopBtn = document.getElementById("scrollToTopBtn");
       if (scrollToTopBtn) {
         window.addEventListener("scroll", () => {
-          // Show button after scrolling down 400px
           if (window.scrollY > 400) {
             scrollToTopBtn.classList.remove("opacity-0", "translate-y-4", "pointer-events-none");
             scrollToTopBtn.classList.add("opacity-100", "translate-y-0");
@@ -664,12 +460,8 @@ function parseParagraphs(text: string | null | undefined) {
             scrollToTopBtn.classList.remove("opacity-100", "translate-y-0", "hover:-translate-y-1");
           }
         });
-
         scrollToTopBtn.addEventListener("click", () => {
-          window.scrollTo({
-            top: 0,
-            behavior: "smooth"
-          });
+          window.scrollTo({ top: 0, behavior: "smooth" });
         });
       }
     });
