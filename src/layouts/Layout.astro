@@ -17,10 +17,11 @@ const { title, headerTitle } = Astro.props;
     <meta name="viewport" content="width=device-width" />
 
     <!-- 1. The Core Widget CDN -->
-    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
-    
+    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"
+    ></script>
+
     <!-- 2. Force Open the Password Modal if Invite Token exists -->
-    <script is:inline>
+    <!-- <script is:inline>
       if (window.netlifyIdentity) {
         // Listen for the initial load of the widget
         window.netlifyIdentity.on("init", (user) => {
@@ -35,7 +36,7 @@ const { title, headerTitle } = Astro.props;
           document.location.href = "/admin/index.html";
         });
       }
-    </script>
+    </script> -->
 
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
@@ -65,6 +66,18 @@ const { title, headerTitle } = Astro.props;
       </div>
     </header>
     <slot />
+
+    <script is:inline>
+      if (window.netlifyIdentity) {
+        window.netlifyIdentity.on("init", (user) => {
+          if (!user) {
+            window.netlifyIdentity.on("login", () => {
+              document.location.href = "/admin/";
+            });
+          }
+        });
+      }
+    </script>
   </body>
 </html>
 
