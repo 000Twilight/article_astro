@@ -2,8 +2,10 @@ backend:
   name: git-gateway
   branch: main # Change to your master/main branch name
 
-# local_backend: true # Allows you to test locally using 'npx decap-cms-proxy-server'
-
+# Tells Decap to ONLY run the local backend server when you are on localhost
+local_backend:
+  allowed_hosts: ["localhost", "127.0.0.1"]
+  
 media_folder: "public/images/homepage"
 public_folder: "/images/homepage"
 

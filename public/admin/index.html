@@ -10,5 +10,14 @@
   <body>
     <!-- Include the script that builds the Decap page page -->
     <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+
+    <script>
+      if (window.netlifyIdentity) {
+        window.netlifyIdentity.on("logout", () => {
+          // Send them completely out of the admin panel back to the public homepage
+          window.location.href = "/";
+        });
+      }
+    </script>
   </body>
 </html>
