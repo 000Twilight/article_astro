@@ -1,0 +1,51 @@
+backend:
+  name: git-gateway
+  branch: main # Change to your master/main branch name
+
+local_backend: true # Allows you to test locally using 'npx decap-cms-proxy-server'
+
+media_folder: "public/images/homepage"
+public_folder: "/images/homepage"
+
+collections:
+  - name: "homepage"
+    label: "Homepage Content"
+    delete: false # Prevents the user from accidentally removing the file
+    files:
+      - file: "src/content/homepage/data.json"
+        label: "Main Landing Page"
+        name: "landing"
+        fields:
+          - { label: "Header Navigation Title", name: "headerTitle", widget: "string" }
+          - { label: "Main Article Title", name: "coverTitle", widget: "text" }
+          - { label: "Main Article Intro Paragraph", name: "coverIntro", widget: "text" }
+          - { label: "Cover Image", name: "coverImage", widget: "image", required: false }
+          - { label: "YouTube Embed URL", name: "videoUrl", widget: "string" }
+          
+          - { label: "Text Section 1", name: "textSection1", widget: "text" }
+          - { label: "Section 2 Title", name: "section2Title", widget: "string" }
+          - { label: "Text Section 2", name: "textSection2", widget: "text" }
+          
+          - label: "Timeline Events"
+            name: "timeline"
+            widget: "list"
+            summary: '{{fields.year}}'
+            fields:
+              - { label: "Year / Heading", name: "year", widget: "string" }
+              - { label: "Description", name: "text", widget: "text" }
+              - { label: "Timeline Image", name: "image", widget: "image", required: false }
+
+          - { label: "Text Section 3", name: "textSection3", widget: "text" }
+          - { label: "Text Section 4 (Colored borders)", name: "textSection4", widget: "text" }
+          - { label: "Section 5 Title", name: "section5Title", widget: "string" }
+          - { label: "Text Section 5", name: "textSection5", widget: "text" }
+          
+          - { label: "Graphic 2A (Left Image)", name: "graphic2A", widget: "image", required: false }
+          - { label: "Graphic 2B (Right Image)", name: "graphic2B", widget: "image", required: false }
+
+          - { label: "Text Section 6", name: "textSection6", widget: "text" }
+          - { label: "Section 7 Title", name: "section7Title", widget: "string" }
+          - { label: "Text Section 7", name: "textSection7", widget: "text" }
+          - { label: "Text Section 8 (Dark background)", name: "textSection8", widget: "text" }
+          
+          - { label: "Final Footer Message", name: "footerMessage", widget: "text" }

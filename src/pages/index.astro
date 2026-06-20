@@ -1,77 +1,16 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import { createReader } from '@keystatic/core/reader';
-import keystaticConfig from '../../keystatic.config';
+import homepage from "../content/homepage/data.json";
 
-// 1. Explicitly define the types so TypeScript stops complaining
+// Type definitions for your layout arrays
 type TimelineItem = {
   year: string;
   text: string;
   image: string | null;
 };
 
-interface HomepageData {
-  headerTitle: string;
-  coverTitle: string;
-  coverIntro: string;
-  coverImage: string | null;
-  videoUrl: string;
-  textSection1: string;
-  section2Title: string;
-  textSection2: string;
-  timeline: TimelineItem[];
-  textSection3: string;
-  textSection4: string;
-  section5Title: string;
-  textSection5: string;
-  graphic2A: string | null;
-  graphic2B: string | null;
-  textSection6: string;
-  section7Title: string;
-  textSection7: string;
-  textSection8: string;
-  footerMessage: string;
-}
-
-// Initialize the reader
-const reader = createReader(process.cwd(), keystaticConfig);
-
-// Await the data and cast it to our new type
-const rawData = await reader.singletons.homepage.read();
-const homepageData = rawData as HomepageData | null;
-
-// Fallback data
-const homepage: HomepageData = homepageData || {
-  headerTitle: 'Tiga Cerita, Satu Realitas',
-  coverTitle: 'Tiga Cerita,\nSatu Realitas :\nCerita Pekerja Muda Hari Ini',
-  coverIntro: 'Dalam beberapa tahun terakhir, Generasi Z muncul sebagai salah satu kelompok paling dominan...',
-  coverImage: null,
-  videoUrl: 'https://www.youtube.com/embed/Q7LsgNkcDCY',
-  textSection1: '',
-  section2Title: 'Berawal dari Pilihan Tiga Pekerja Muda',
-  textSection2: '',
-  timeline: [
-    { year: '1935', text: 'Lorem ipsum dolor sit amet...', image: null },
-    { year: '1940', text: 'Curabitur vitae nunc sed velit...', image: null },
-    { year: '1951', text: 'Pellentesque habitant morbi...', image: null },
-    { year: '1975', text: 'Vulputate enim nulla aliquet...', image: null }
-  ],
-  textSection3: '',
-  textSection4: '',
-  section5Title: 'Ketika Tekanan Mencapai Puncak',
-  textSection5: '',
-  graphic2A: null,
-  graphic2B: null,
-  textSection6: '',
-  section7Title: 'Antara Daya Tahan dan Sistem Kerja',
-  textSection7: '',
-  textSection8: '',
-  footerMessage: 'Bertahan atau Pergi.\n\nPada akhirnya, pilihan untuk bertahan atau pergi menjadi bagian...'
-};
-
-// Explicitly type the filter parameters to remove the implicit 'any' errors
-const col1Items = (homepage.timeline || []).filter((_: any, i: number) => i % 2 === 0);
-const col2Items = (homepage.timeline || []).filter((_: any, i: number) => i % 2 === 1);
+const col1Items = (homepage.timeline || []).filter((_, i) => i % 2 === 0);
+const col2Items = (homepage.timeline || []).filter((_, i) => i % 2 === 1);
 
 const col1Rotations = ["-rotate-6", "-rotate-2", "-rotate-3", "-rotate-2"];
 const col2Rotations = ["rotate-6", "rotate-4", "rotate-6", "rotate-3"];
