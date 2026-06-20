@@ -1,5 +1,5 @@
 ---
-import '../styles.css'
+import "../styles.css";
 
 export interface Props {
   title: string;
@@ -9,23 +9,46 @@ export interface Props {
 const { title, headerTitle } = Astro.props;
 ---
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en" class="scroll-smooth">
   <head>
     <meta charset="UTF-8" />
-    <meta name="description" content="Astro Longform Layout">
+    <meta name="description" content="Astro Longform Layout" />
     <meta name="viewport" content="width=device-width" />
-    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+
+    <!-- 1. The Core Widget CDN -->
+    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"
+    ></script>
+
+    <!-- 2. The Auto-Initialization Script (Must be inline!) -->
+    <script is:inline>
+      if (window.netlifyIdentity) {
+        window.netlifyIdentity.on("init", (user) => {
+          if (!user) {
+            window.netlifyIdentity.on("login", () => {
+              document.location.href = "/admin/index.html";
+            });
+          }
+        });
+      }
+    </script>
+
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
   </head>
   <body class="bg-[#f8f5f0] text-gray-800 antialiased overflow-x-hidden">
-    <header id="main-header" class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-200 shadow-sm -translate-y-full transition-transform duration-500 ease-in-out">
+    <header
+      id="main-header"
+      class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-200 shadow-sm -translate-y-full transition-transform duration-500 ease-in-out"
+    >
       <div class="px-4 py-3 mx-auto">
         <nav class="flex items-center">
           <h1 class="font-bold text-lg flex items-center gap-2">
-            <a href="/" class="flex items-center gap-2 hover:opacity-80 transition-opacity">
+            <a
+              href="/"
+              class="flex items-center gap-2 hover:opacity-80 transition-opacity"
+            >
               <div class="w-8 h-8 bg-red-600 rounded-sm"></div>
               <span class="text-black inline-block">
                 <i class="font-serif italic font-medium">Article - </i>
@@ -42,22 +65,25 @@ const { title, headerTitle } = Astro.props;
 </html>
 
 <script>
-  const header = document.getElementById('main-header');
-  const cover = document.getElementById('cover-section');
-  
+  const header = document.getElementById("main-header");
+  const cover = document.getElementById("cover-section");
+
   if (header && cover) {
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (!entry.isIntersecting) {
-          header.classList.remove('-translate-y-full');
-        } else {
-          header.classList.add('-translate-y-full');
-        }
-      });
-    }, { threshold: 0 }); 
-    
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) {
+            header.classList.remove("-translate-y-full");
+          } else {
+            header.classList.add("-translate-y-full");
+          }
+        });
+      },
+      { threshold: 0 },
+    );
+
     observer.observe(cover);
   } else if (header) {
-    header.classList.remove('-translate-y-full');
+    header.classList.remove("-translate-y-full");
   }
 </script>
