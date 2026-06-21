@@ -9,8 +9,11 @@ type TimelineItem = {
   image: string | null;
 };
 
-const col1Items = (homepage.timeline || []).filter((_, i) => i % 2 === 0);
-const col2Items = (homepage.timeline || []).filter((_, i) => i % 2 === 1);
+// Explicitly cast the timeline array as TimelineItem[]
+const timelineData = (homepage.timeline || []) as TimelineItem[];
+
+const col1Items = timelineData.filter((_, i) => i % 2 === 0);
+const col2Items = timelineData.filter((_, i) => i % 2 === 1);
 
 const col1Rotations = ["-rotate-6", "-rotate-2", "-rotate-3", "-rotate-2"];
 const col2Rotations = ["rotate-6", "rotate-4", "rotate-6", "rotate-3"];
@@ -20,15 +23,16 @@ function parseParagraphs(text: string | null | undefined) {
 }
 ---
 
-<Layout title={homepage.coverTitle.replace('\n', ' ')} headerTitle={homepage.headerTitle}>
-    <main class="pt-0">
+<Layout title={homepage.coverTitle?.replace('\n', ' ')} headerTitle={homepage.headerTitle}>
+  <main class="pt-0">
+    <!-- Hero / Cover Image Section -->
     <section id="cover-section" class="relative w-full h-[60vh] md:h-[80vh] lg:h-screen min-h-100 overflow-hidden bg-gray-200">
       <div class="absolute inset-0 flex items-center justify-center bg-gray-300" data-motion="fade-in">
         <span class="text-gray-500 font-medium" data-motion="zoom-in" style="animation-delay: 200ms">Hero Image Placeholder</span>
       </div>
     </section>
 
-    <!-- Cover Image Section -->
+    <!-- Cover Image Frame Section -->
     <section class="py-12 md:py-20">
       <div class="flex justify-center">
         <div class="w-11/12 md:w-9/12 xl:w-7/12" data-motion="zoom-in">
@@ -46,7 +50,7 @@ function parseParagraphs(text: string | null | undefined) {
       </div>
     </section>
 
-    <!-- Section 1 -->
+    <!-- Section 1 (Intro) -->
     <section class="relative overflow-visible pb-12">
       <div class="absolute right-0 top-10 w-24 h-48 bg-yellow-200/50 rounded-l-full hidden md:block" data-motion="fade-left" style="animation-delay: 200ms"></div>
       <div class="absolute left-0 bottom-10 w-20 h-40 bg-green-200/50 rounded-r-full hidden md:block" data-motion="fade-right" style="animation-delay: 400ms"></div>
@@ -67,116 +71,146 @@ function parseParagraphs(text: string | null | undefined) {
       </div>
     </section>
 
-    <!-- Section 2 -->
+    <!-- Section 2: Character Introductions (Interactive) -->
     <section class="relative overflow-visible pb-12 bg-gray-50/50 py-12">
       <div class="flex justify-center px-4 mb-8">
-        <div class="w-11/12 md:w-8/12 xl:w-6/12">
-          <div class="title-area">
-            <h2 class="text-3xl md:text-4xl font-black mb-6 text-gray-900 border-b-2 border-red-500 pb-2" data-motion="fade-right">
-              {homepage.section2Title}
+        <div class="w-11/12 md:w-8/12 xl:w-6/12 text-center">
+          <h2 class="text-3xl md:text-4xl font-black mb-6 text-gray-900 border-b-2 border-red-500 pb-2 inline-block" data-motion="fade-up">
+            {homepage.section2Title}
+          </h2>
+          {parseParagraphs(homepage.textSection2).map((p, i) => (
+            <p class="text-lg text-gray-700 font-serif mb-4" data-motion="fade-up" style={`animation-delay: ${100 + (i * 100)}ms`}>
+              {p}
+            </p>
+          ))}
+        </div>
+      </div>
+
+      <!-- 3 Columns Interactive Grid -->
+      <div class="flex justify-center px-4">
+        <div class="w-full md:w-10/12 xl:w-8/12">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {homepage.characters && homepage.characters.map((char, index) => (
+              <div 
+                class="character-card group relative bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden cursor-pointer hover:shadow-xl transition-all duration-300"
+                data-motion="fade-up" 
+                style={`animation-delay: ${index * 150}ms`}
+              >
+                <div class={`${char.color} h-3 w-full`}></div>
+                <div class="p-6 text-center z-10 relative bg-white">
+                  <div class="w-24 h-24 mx-auto bg-gray-200 rounded-full mb-4 overflow-hidden border-4 border-white shadow-sm">
+                    {char.image ? <img src={char.image} alt={char.name} class="w-full h-full object-cover" /> : <span class="text-gray-400 text-xs flex items-center justify-center h-full">Image</span>}
+                  </div>
+                  <h3 class="text-2xl font-black text-gray-900 mb-1">{char.name}, {char.age}</h3>
+                  <p class="text-sm text-gray-500 font-medium">{char.job}</p>
+                  
+                  <button class="mt-4 px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-800 text-sm font-semibold rounded-full transition-colors toggle-btn">
+                    Baca Cerita
+                  </button>
+                </div>
+
+                <div class="story-panel hidden bg-gray-50 p-6 border-t border-gray-100 text-left">
+                  <p class="text-gray-700 font-serif leading-relaxed text-sm">
+                    {char.story}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Optional Timeline Section -->
+    {homepage.showTimeline && (
+      <section class="py-12 md:py-20 relative overflow-hidden mt-8 mb-12 flex justify-center px-4">
+        <div class="relative w-full md:w-4/5 lg:w-[60%] max-w-4xl border-4 border-red-600 rounded-[100px] md:rounded-[150px] pt-16 md:pt-24 pb-20 md:pb-28 flex flex-col items-center z-10" data-motion="zoom-in">
+          <div class="absolute inset-2 md:inset-3 border-2 border-red-600 rounded-[90px] md:rounded-[140px] pointer-events-none z-0"></div>
+
+          <div class="relative z-10 px-6 md:px-12 text-center max-w-3xl" data-motion="fade-up" style="animation-delay: 200ms">
+            <div class="flex justify-center items-center space-x-2 mb-4">
+              <span class="block w-12 h-1 bg-red-600 rounded-full"></span>
+              <span class="block w-3 h-3 border-2 border-red-600 rounded-full"></span>
+              <span class="block w-12 h-1 bg-red-600 rounded-full"></span>
+            </div>
+
+            <h2 class="text-4xl md:text-5xl font-serif font-black text-red-600 leading-tight mb-8">
+              {homepage.coverTitle?.split('\n').map((line) => (
+                <>{line}<br /></>
+              ))}
+            </h2>
+
+            <p class="text-red-700 font-medium text-sm md:text-base leading-relaxed max-w-2xl mx-auto pb-16">
+              {homepage.coverIntro}
+            </p>
+          </div>
+
+          <div class="w-full relative flex pb-12 z-10">
+            <div class="absolute left-1/2 -translate-x-1/2 top-0 bottom-12 md:bottom-20 w-1 bg-red-600 z-0" data-motion="fade-in" style="animation-delay: 400ms"></div>
+
+            <div class="w-1/2 flex flex-col items-end gap-y-16 md:gap-y-24">
+              {col1Items.map((item, index) => {
+                const rotation = col1Rotations[index % col1Rotations.length];
+                return (
+                  <div class="flex flex-col items-center w-full sm:w-11/12 max-w-[320px] md:max-w-[380px]" data-motion="fade-right" style={`animation-delay: ${100 + (index * 200)}ms`}>
+                    <div class="relative w-full max-w-[260px] h-40 md:h-56 mb-6 flex justify-center items-center">
+                      <div class={`absolute z-20 w-40 md:w-48 aspect-[4/3] bg-gray-300 border-[4px] md:border-[6px] border-[#eccb2f] ${rotation} shadow-lg flex items-center justify-center overflow-hidden`}>
+                        {item.image ? <img src={item.image} alt={item.year} class="w-full h-full object-cover" /> : <span class="text-[10px] md:text-xs text-gray-600 font-medium text-center">Image</span>}
+                      </div>
+                    </div>
+                    <div class="flex w-full items-center">
+                      <div class="flex-1"></div>
+                      <h3 class="text-3xl md:text-4xl font-black text-red-600 tracking-tight px-4 md:px-6">{item.year}</h3>
+                      <div class="flex-1 h-1 bg-red-600 z-10"></div>
+                    </div>
+                    <div class="w-3 md:w-4 h-3 md:h-4 bg-red-600 rounded-full mt-2 mb-4"></div>
+                    <div class="text-center px-4 space-y-3 text-sm md:text-base font-medium text-gray-900 leading-snug">
+                      <p>{item.text}</p>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            <div class="w-1/2 flex flex-col items-start gap-y-16 md:gap-y-24 pt-[14rem] md:pt-[20rem]">
+              {col2Items.map((item, index) => {
+                const rotation = col2Rotations[index % col2Rotations.length];
+                return (
+                  <div class="flex flex-col items-center w-full sm:w-11/12 max-w-[320px] md:max-w-[380px]" data-motion="fade-left" style={`animation-delay: ${200 + (index * 200)}ms`}>
+                    <div class="relative w-full max-w-[260px] h-40 md:h-56 mb-6 flex justify-center items-center">
+                      <div class={`absolute z-20 w-40 md:w-48 aspect-[4/3] bg-gray-300 border-[4px] md:border-[6px] border-[#eccb2f] ${rotation} shadow-lg flex items-center justify-center overflow-hidden`}>
+                        {item.image ? <img src={item.image} alt={item.year} class="w-full h-full object-cover" /> : <span class="text-[10px] md:text-xs text-gray-600 font-medium text-center">Image</span>}
+                      </div>
+                    </div>
+                    <div class="flex w-full items-center">
+                      <div class="flex-1 h-1 bg-red-600 z-10"></div>
+                      <h3 class="text-3xl md:text-4xl font-black text-red-600 tracking-tight px-4 md:px-6">{item.year}</h3>
+                      <div class="flex-1"></div>
+                    </div>
+                    <div class="w-3 md:w-4 h-3 md:h-4 bg-red-600 rounded-full mt-2 mb-4"></div>
+                    <div class="text-center px-4 space-y-3 text-sm md:text-base font-medium text-gray-900 leading-snug">
+                      <p>{item.text}</p>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      </section>
+    )}
+
+    <!-- Section 3 -->
+    <section class="relative overflow-visible pb-12 pt-8">
+      {homepage.section3Title && (
+        <div class="flex justify-center px-4 mb-8">
+          <div class="w-11/12 md:w-8/12 xl:w-6/12">
+            <h2 class="text-3xl md:text-4xl font-black mb-6 text-gray-900 border-b-2 border-red-500 pb-2 inline-block" data-motion="fade-right">
+              {homepage.section3Title}
             </h2>
           </div>
         </div>
-      </div>
-      <div class="flex justify-center px-4">
-        <div class="w-11/12 md:w-8/12 xl:w-6/12">
-          <div class="text-lg md:text-xl text-gray-800 space-y-6 font-serif leading-relaxed">
-            {parseParagraphs(homepage.textSection2).map((p, i) => {
-              const delays = [100, 200, 300, 400, 500, 600, 700];
-              const motions = ['fade-left', 'fade-right', 'fade-left', 'fade-right', 'fade-left', 'fade-right', 'fade-up'];
-              return (
-                <p data-motion={motions[i] || 'fade-up'} style={`animation-delay: ${delays[i] || (i * 100)}ms`}>
-                  {p}
-                </p>
-              );
-            })}
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Title & Timeline Section -->
-    <section class="py-12 md:py-20 relative overflow-hidden mt-8 mb-12 flex justify-center px-4">
-      <div class="relative w-full md:w-4/5 lg:w-[60%] max-w-4xl border-4 border-red-600 rounded-[100px] md:rounded-[150px] pt-16 md:pt-24 pb-20 md:pb-28 flex flex-col items-center z-10" data-motion="zoom-in">
-        <div class="absolute inset-2 md:inset-3 border-2 border-red-600 rounded-[90px] md:rounded-[140px] pointer-events-none z-0"></div>
-
-        <div class="relative z-10 px-6 md:px-12 text-center max-w-3xl" data-motion="fade-up" style="animation-delay: 200ms">
-          <div class="flex justify-center items-center space-x-2 mb-4">
-            <span class="block w-12 h-1 bg-red-600 rounded-full"></span>
-            <span class="block w-3 h-3 border-2 border-red-600 rounded-full"></span>
-            <span class="block w-12 h-1 bg-red-600 rounded-full"></span>
-          </div>
-
-          <h2 class="text-4xl md:text-5xl font-serif font-black text-red-600 leading-tight mb-8">
-            {homepage.coverTitle?.split('\n').map((line) => (
-              <>{line}<br /></>
-            ))}
-          </h2>
-
-          <p class="text-red-700 font-medium text-sm md:text-base leading-relaxed max-w-2xl mx-auto pb-16">
-            {homepage.coverIntro}
-          </p>
-        </div>
-
-        <!-- Dynamic Timeline -->
-        <div class="w-full relative flex pb-12 z-10">
-          <div class="absolute left-1/2 -translate-x-1/2 top-0 bottom-12 md:bottom-20 w-1 bg-red-600 z-0" data-motion="fade-in" style="animation-delay: 400ms"></div>
-
-          <!-- Column 1 (Left visually, Right aligned) -->
-          <div class="w-1/2 flex flex-col items-end gap-y-16 md:gap-y-24">
-            {col1Items.map((item, index) => {
-              const rotation = col1Rotations[index % col1Rotations.length];
-              return (
-                <div class="flex flex-col items-center w-full sm:w-11/12 max-w-[320px] md:max-w-[380px]" data-motion="fade-right" style={`animation-delay: ${100 + (index * 200)}ms`}>
-                  <div class="relative w-full max-w-[260px] h-40 md:h-56 mb-6 flex justify-center items-center">
-                    <div class={`absolute z-20 w-40 md:w-48 aspect-[4/3] bg-gray-300 border-[4px] md:border-[6px] border-[#eccb2f] ${rotation} shadow-lg flex items-center justify-center overflow-hidden`}>
-                      {item.image ? <img src={item.image} alt={item.year} class="w-full h-full object-cover" /> : <span class="text-[10px] md:text-xs text-gray-600 font-medium text-center">Image</span>}
-                    </div>
-                  </div>
-                  <div class="flex w-full items-center">
-                    <div class="flex-1"></div>
-                    <h3 class="text-3xl md:text-4xl font-black text-red-600 tracking-tight px-4 md:px-6">{item.year}</h3>
-                    <div class="flex-1 h-1 bg-red-600 z-10"></div>
-                  </div>
-                  <div class="w-3 md:w-4 h-3 md:h-4 bg-red-600 rounded-full mt-2 mb-4"></div>
-                  <div class="text-center px-4 space-y-3 text-sm md:text-base font-medium text-gray-900 leading-snug">
-                    <p>{item.text}</p>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-
-          <!-- Column 2 (Right visually, Left aligned) -->
-          <div class="w-1/2 flex flex-col items-start gap-y-16 md:gap-y-24 pt-[14rem] md:pt-[20rem]">
-            {col2Items.map((item, index) => {
-              const rotation = col2Rotations[index % col2Rotations.length];
-              return (
-                <div class="flex flex-col items-center w-full sm:w-11/12 max-w-[320px] md:max-w-[380px]" data-motion="fade-left" style={`animation-delay: ${200 + (index * 200)}ms`}>
-                  <div class="relative w-full max-w-[260px] h-40 md:h-56 mb-6 flex justify-center items-center">
-                    <div class={`absolute z-20 w-40 md:w-48 aspect-[4/3] bg-gray-300 border-[4px] md:border-[6px] border-[#eccb2f] ${rotation} shadow-lg flex items-center justify-center overflow-hidden`}>
-                      {item.image ? <img src={item.image} alt={item.year} class="w-full h-full object-cover" /> : <span class="text-[10px] md:text-xs text-gray-600 font-medium text-center">Image</span>}
-                    </div>
-                  </div>
-                  <div class="flex w-full items-center">
-                    <div class="flex-1 h-1 bg-red-600 z-10"></div>
-                    <h3 class="text-3xl md:text-4xl font-black text-red-600 tracking-tight px-4 md:px-6">{item.year}</h3>
-                    <div class="flex-1"></div>
-                  </div>
-                  <div class="w-3 md:w-4 h-3 md:h-4 bg-red-600 rounded-full mt-2 mb-4"></div>
-                  <div class="text-center px-4 space-y-3 text-sm md:text-base font-medium text-gray-900 leading-snug">
-                    <p>{item.text}</p>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Section 3 -->
-    <section class="relative overflow-visible pb-12">
+      )}
       <div class="flex justify-center px-4">
         <div class="w-11/12 md:w-8/12 xl:w-6/12">
           <div class="text-lg md:text-xl text-gray-800 space-y-6 font-serif leading-relaxed">
@@ -215,6 +249,15 @@ function parseParagraphs(text: string | null | undefined) {
 
     <!-- Section 4 -->
     <section class="relative overflow-visible pb-12 bg-stone-50 py-8">
+      {homepage.section4Title && (
+        <div class="flex justify-center px-4 mb-8">
+          <div class="w-11/12 md:w-8/12 xl:w-6/12">
+            <h2 class="text-3xl md:text-4xl font-black mb-6 text-gray-900 border-b-2 border-red-500 pb-2 inline-block" data-motion="fade-right">
+              {homepage.section4Title}
+            </h2>
+          </div>
+        </div>
+      )}
       <div class="flex justify-center px-4">
         <div class="w-11/12 md:w-8/12 xl:w-6/12">
           <div class="text-lg md:text-xl text-gray-800 space-y-6 font-serif leading-relaxed">
@@ -233,13 +276,15 @@ function parseParagraphs(text: string | null | undefined) {
 
     <!-- Section 5 -->
     <section class="relative overflow-visible pb-12 pt-8">
-      <div class="flex justify-center px-4 mb-8">
-        <div class="w-11/12 md:w-8/12 xl:w-6/12">
-          <div class="title-area">
-            <h2 class="text-3xl md:text-4xl font-black mb-6" data-motion="zoom-in">{homepage.section5Title}</h2>
+      {homepage.section5Title && (
+        <div class="flex justify-center px-4 mb-8">
+          <div class="w-11/12 md:w-8/12 xl:w-6/12">
+            <h2 class="text-3xl md:text-4xl font-black mb-6 border-b-2 border-red-500 pb-2 inline-block" data-motion="zoom-in">
+              {homepage.section5Title}
+            </h2>
           </div>
         </div>
-      </div>
+      )}
       <div class="flex justify-center px-4">
         <div class="w-11/12 md:w-8/12 xl:w-6/12">
           <div class="text-lg md:text-xl text-gray-800 space-y-6 font-serif leading-relaxed">
@@ -285,6 +330,15 @@ function parseParagraphs(text: string | null | undefined) {
 
     <!-- Section 6 -->
     <section class="relative overflow-visible py-12">
+      {homepage.section6Title && (
+        <div class="flex justify-center px-4 mb-8">
+          <div class="w-11/12 md:w-8/12 xl:w-6/12">
+            <h2 class="text-3xl md:text-4xl font-black mb-6 text-gray-900 border-b-2 border-red-500 pb-2 inline-block" data-motion="fade-right">
+              {homepage.section6Title}
+            </h2>
+          </div>
+        </div>
+      )}
       <div class="flex justify-center px-4">
         <div class="w-11/12 md:w-8/12 xl:w-6/12">
           <div class="text-lg md:text-xl text-gray-800 space-y-6 font-serif leading-relaxed">
@@ -298,13 +352,15 @@ function parseParagraphs(text: string | null | undefined) {
 
     <!-- Section 7 -->
     <section class="relative overflow-visible pb-12">
-      <div class="flex justify-center px-4 mb-8">
-        <div class="w-11/12 md:w-8/12 xl:w-6/12">
-          <div class="title-area">
-            <h2 class="text-3xl md:text-4xl font-black mb-6 text-red-600" data-motion="fade-right">{homepage.section7Title}</h2>
+      {homepage.section7Title && (
+        <div class="flex justify-center px-4 mb-8">
+          <div class="w-11/12 md:w-8/12 xl:w-6/12">
+            <h2 class="text-3xl md:text-4xl font-black mb-6 text-red-600 border-b-2 border-gray-300 pb-2 inline-block" data-motion="fade-right">
+              {homepage.section7Title}
+            </h2>
           </div>
         </div>
-      </div>
+      )}
       <div class="flex justify-center px-4">
         <div class="w-11/12 md:w-8/12 xl:w-6/12">
           <div class="text-lg md:text-xl text-gray-800 space-y-6 font-serif leading-relaxed">
@@ -318,6 +374,15 @@ function parseParagraphs(text: string | null | undefined) {
 
     <!-- Section 8 (Dark) -->
     <section class="relative overflow-visible pb-12 bg-gray-900 text-white py-16 rounded-t-[50px]">
+      {homepage.section8Title && (
+        <div class="flex justify-center px-4 mb-8">
+          <div class="w-11/12 md:w-8/12 xl:w-6/12">
+            <h2 class="text-3xl md:text-4xl font-black mb-6 text-white border-b-2 border-yellow-400 pb-2 inline-block" data-motion="fade-right">
+              {homepage.section8Title}
+            </h2>
+          </div>
+        </div>
+      )}
       <div class="flex justify-center px-4">
         <div class="w-11/12 md:w-8/12 xl:w-6/12">
           <div class="text-lg md:text-xl text-gray-300 space-y-6 font-serif leading-relaxed">
@@ -364,6 +429,7 @@ function parseParagraphs(text: string | null | undefined) {
 
   <script>
     document.addEventListener("DOMContentLoaded", () => {
+      // 1. Intersection Observer for scroll animations
       const observer = new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
           const el = entry.target as HTMLElement;
@@ -388,6 +454,7 @@ function parseParagraphs(text: string | null | undefined) {
         observer.observe(el);
       });
 
+      // 2. Scroll to Top Button Logic
       const scrollToTopBtn = document.getElementById("scrollToTopBtn");
       if (scrollToTopBtn) {
         window.addEventListener("scroll", () => {
@@ -403,6 +470,26 @@ function parseParagraphs(text: string | null | undefined) {
           window.scrollTo({ top: 0, behavior: "smooth" });
         });
       }
+
+      // 3. Character Card Toggle Logic
+      const cards = document.querySelectorAll('.character-card');
+      cards.forEach(card => {
+        const btn = card.querySelector('.toggle-btn');
+        const panel = card.querySelector('.story-panel');
+        
+        if (!btn || !panel) return; // Prevent script crash if elements are missing
+        
+        card.addEventListener('click', () => {
+          panel.classList.toggle('hidden');
+          if(panel.classList.contains('hidden')) {
+            btn.textContent = 'Baca Cerita';
+            btn.classList.remove('bg-gray-800', 'text-white');
+          } else {
+            btn.textContent = 'Tutup Cerita';
+            btn.classList.add('bg-gray-800', 'text-white');
+          }
+        });
+      });
     });
   </script>
 </Layout>

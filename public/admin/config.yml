@@ -1,8 +1,7 @@
 backend:
   name: git-gateway
-  branch: main # Change to your master/main branch name
+  branch: main
 
-# Tells Decap to ONLY run the local backend server when you are on localhost
 local_backend:
   allowed_hosts: ["localhost", "127.0.0.1"]
   
@@ -12,7 +11,7 @@ public_folder: "/images/homepage"
 collections:
   - name: "homepage"
     label: "Homepage Content"
-    delete: false # Prevents the user from accidentally removing the file
+    delete: false
     files:
       - file: "src/content/homepage/data.json"
         label: "Main Landing Page"
@@ -20,14 +19,30 @@ collections:
         fields:
           - { label: "Header Navigation Title", name: "headerTitle", widget: "string" }
           - { label: "Main Article Title", name: "coverTitle", widget: "text" }
-          - { label: "Main Article Intro Paragraph", name: "coverIntro", widget: "text" }
+          - { label: "Main Article Intro", name: "coverIntro", widget: "text" }
           - { label: "Cover Image", name: "coverImage", widget: "image", required: false }
           - { label: "YouTube Embed URL", name: "videoUrl", widget: "string" }
           
-          - { label: "Text Section 1", name: "textSection1", widget: "text" }
-          - { label: "Section 2 Title", name: "section2Title", widget: "string" }
-          - { label: "Text Section 2", name: "textSection2", widget: "text" }
+          # Intro block (SUPAS data context)
+          - { label: "Text Section 1 (Intro)", name: "textSection1", widget: "text" }
           
+          # Characters Section
+          - { label: "Section 2 Title (Characters)", name: "section2Title", widget: "string" }
+          - { label: "Text Section 2", name: "textSection2", widget: "text" }
+          - label: "Character Stories"
+            name: "characters"
+            widget: "list"
+            summary: '{{fields.name}}'
+            fields:
+              - { label: "Name", name: "name", widget: "string" }
+              - { label: "Job Title", name: "job", widget: "string" }
+              - { label: "Age", name: "age", widget: "string" }
+              - { label: "Theme Color", name: "color", widget: "select", options: ["bg-blue-500", "bg-pink-500", "bg-emerald-500"] }
+              - { label: "Profile Image", name: "image", widget: "image", required: false }
+              - { label: "Full Story", name: "story", widget: "text" }
+          
+          # Timeline (Keeping it in case you still want to use it)
+          - { label: "Show Timeline", name: "showTimeline", widget: "boolean", default: false }
           - label: "Timeline Events"
             name: "timeline"
             widget: "list"
@@ -37,17 +52,32 @@ collections:
               - { label: "Description", name: "text", widget: "text" }
               - { label: "Timeline Image", name: "image", widget: "image", required: false }
 
+          # Section 3: Harapan
+          - { label: "Section 3 Title (Harapan)", name: "section3Title", widget: "string" }
           - { label: "Text Section 3", name: "textSection3", widget: "text" }
-          - { label: "Text Section 4 (Colored borders)", name: "textSection4", widget: "text" }
-          - { label: "Section 5 Title", name: "section5Title", widget: "string" }
+          
+          # Section 4: Batasan Kerja
+          - { label: "Section 4 Title (Batasan)", name: "section4Title", widget: "string" }
+          - { label: "Text Section 4", name: "textSection4", widget: "text" }
+          
+          # Section 5: Tekanan
+          - { label: "Section 5 Title (Tekanan)", name: "section5Title", widget: "string" }
           - { label: "Text Section 5", name: "textSection5", widget: "text" }
           
+          # Graphics / Jakpat Data
           - { label: "Graphic 2A (Left Image)", name: "graphic2A", widget: "image", required: false }
           - { label: "Graphic 2B (Right Image)", name: "graphic2B", widget: "image", required: false }
 
+          # Section 6: Pakar
+          - { label: "Section 6 Title (Pakar)", name: "section6Title", widget: "string" }
           - { label: "Text Section 6", name: "textSection6", widget: "text" }
-          - { label: "Section 7 Title", name: "section7Title", widget: "string" }
+          
+          # Section 7: Faktor
+          - { label: "Section 7 Title (Faktor)", name: "section7Title", widget: "string" }
           - { label: "Text Section 7", name: "textSection7", widget: "text" }
-          - { label: "Text Section 8 (Dark background)", name: "textSection8", widget: "text" }
+          
+          # Section 8: Bertahan
+          - { label: "Section 8 Title (Bertahan/Dark BG)", name: "section8Title", widget: "string" }
+          - { label: "Text Section 8", name: "textSection8", widget: "text" }
           
           - { label: "Final Footer Message", name: "footerMessage", widget: "text" }
