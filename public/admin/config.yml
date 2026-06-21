@@ -81,3 +81,6 @@ collections:
           - { label: "Text Section 8", name: "textSection8", widget: "text" }
           
           - { label: "Final Footer Message", name: "footerMessage", widget: "text" }
+          - { label: "Final Footer Message", name: "footerMessage", widget: "text" }
+          - { label: "Credits Text", name: "creditsText", widget: "string", default: "Developed & Engineered by US." }
+          - { label: "AI Disclaimer", name: "aiDisclaimer", widget: "text", default: "Some visual assets and content components within this article were generated with the assistance of Artificial Intelligence." }

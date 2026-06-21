@@ -59,5 +59,7 @@
   
   "showTimeline": false,
   "timeline": [],
-  "footerMessage": "- Article Longform -"
+  "footerMessage": "- Article Longform -",
+  "creditsText": "Developed & Engineered by Mario Richie Lim.",
+  "aiDisclaimer": "Some visual assets and content components within this article were generated with the assistance of Artificial Intelligence."
 }
