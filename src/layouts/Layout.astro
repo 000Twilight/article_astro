@@ -24,6 +24,16 @@ const { title, headerTitle } = Astro.props;
       }
     </script>
 
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-5365NNDRR7" is:inline></script>
+    <script is:inline>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      // This line automatically tracks the page view
+      gtag('config', 'G-5365NNDRR7');
+    </script>
+
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>

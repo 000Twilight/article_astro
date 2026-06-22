@@ -2,8 +2,7 @@ backend:
   name: git-gateway
   branch: main
 
-local_backend:
-  allowed_hosts: ["localhost", "127.0.0.1"]
+local_backend: true
   
 media_folder: "public/images/homepage"
 public_folder: "/images/homepage"
@@ -12,6 +11,8 @@ collections:
   - name: "homepage"
     label: "Homepage Content"
     delete: false
+    editor:
+      preview: false
     files:
       - file: "src/content/homepage/data.json"
         label: "Main Landing Page"
@@ -27,15 +28,6 @@ collections:
           # Intro block (SUPAS data context)
           - { label: "Text Section 1 (Intro)", name: "textSection1", widget: "text" }
           
-          # New Editorial Credits Fields
-          - { label: "Credits Section Title", name: "creditsTitle", widget: "string", default: "Tim Redaksi & Produksi" }
-          - { label: "Writer Name(s)", name: "creditWriter", widget: "string", default: "Anginette Yoni" }
-          - { label: "Researcher Name(s)", name: "creditResearcher", widget: "string", default: "Anginette Yoni" }
-          - { label: "Editor Name(s)", name: "creditEditor", widget: "string", default: "Anginette Yoni, Darren Antonio" }
-          - { label: "Video Director Name(s)", name: "creditVideoDirector", widget: "string", default: "Anginette Yoni, Darren Antonio" }
-          - { label: "Video Editor Name(s)", name: "creditVideoEditor", widget: "string", default: "Richard Yohanes" }
-          - { label: "Web Editor Name(s)", name: "creditWebEditor", widget: "string", default: "Mario Richie Lim" }
-
           # Characters Section
           - { label: "Section 2 Title (Characters)", name: "section2Title", widget: "string" }
           - { label: "Text Section 2", name: "textSection2", widget: "text" }
@@ -76,9 +68,9 @@ collections:
           
           # Graphics / Jakpat Data
           - { label: "Graphic 2A (Left Image)", name: "graphic2A", widget: "image", required: false }
-          - { label: "Graphic 2B (Right Image)", name: "graphic2B", widget: "image", required: false }
-
           - { label: "Graphic 2A Caption", name: "graphic2ACaption", widget: "string" }
+
+          - { label: "Graphic 2B (Right Image)", name: "graphic2B", widget: "image", required: false }
           - { label: "Graphic 2B Caption", name: "graphic2BCaption", widget: "string" }
 
           # Section 6: Pakar
@@ -92,6 +84,15 @@ collections:
           # Section 8: Bertahan
           - { label: "Section 8 Title (Bertahan/Dark BG)", name: "section8Title", widget: "string" }
           - { label: "Text Section 8", name: "textSection8", widget: "text" }
+
+          # New Editorial Credits Fields
+          - { label: "Credits Section Title", name: "creditsTitle", widget: "string", default: "Tim Redaksi & Produksi" }
+          - { label: "Writer Name(s)", name: "creditWriter", widget: "string", default: "Anginette Yoni" }
+          - { label: "Researcher Name(s)", name: "creditResearcher", widget: "string", default: "Anginette Yoni" }
+          - { label: "Editor Name(s)", name: "creditEditor", widget: "string", default: "Anginette Yoni, Darren Antonio" }
+          - { label: "Video Director Name(s)", name: "creditVideoDirector", widget: "string", default: "Anginette Yoni, Darren Antonio" }
+          - { label: "Video Editor Name(s)", name: "creditVideoEditor", widget: "string", default: "Richard Yohanes" }
+          - { label: "Web Editor Name(s)", name: "creditWebEditor", widget: "string", default: "Mario Richie Lim" }
           
           - { label: "Final Footer Message", name: "footerMessage", widget: "text" }
           - { label: "AI Disclaimer", name: "aiDisclaimer", widget: "text", default: "Some visual assets and content components within this article were generated with the assistance of Artificial Intelligence." }
