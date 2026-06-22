@@ -90,13 +90,13 @@ function parseParagraphs(text: string | null | undefined) {
 
           <!-- Caption Placement: Directly Under Image as requested -->
           <span class="text-xs font-mono uppercase tracking-wider text-gray-400 font-sans mt-8 text-center block border-t border-dashed border-gray-200 pt-4 w-full max-w-sm">
-            Sumber data : SUPAS 2025 dan BPS
+            {homepage.coverCaption}
           </span>
         </div>
 
       </div>
     </section>
-    
+
     <section class="relative overflow-hidden bg-white py-24 px-4 sm:px-6">
       <div class="max-w-6xl mx-auto">
         
@@ -341,6 +341,44 @@ function parseParagraphs(text: string | null | undefined) {
       </div>
     </section>
 
+    <section class="relative overflow-visible pb-12 bg-stone-50 py-8">
+      {
+        homepage.section4Title && (
+          <div class="flex justify-center px-4 mb-8">
+            <div class="w-11/12 md:w-8/12 xl:w-6/12">
+              <h2
+                class="text-3xl md:text-4xl font-black mb-6 text-gray-900 border-b-2 border-red-500 pb-2 inline-block"
+                data-motion="fade-right"
+              >
+                {homepage.section4Title}
+              </h2>
+            </div>
+          </div>
+        )
+      }
+      <div class="flex justify-center px-4">
+        <div class="w-11/12 md:w-8/12 xl:w-6/12">
+          <div
+            class="text-lg md:text-xl text-gray-800 space-y-6 font-serif leading-relaxed"
+          >
+            {
+              parseParagraphs(homepage.textSection4).map((p, i) => {
+                return (
+                  <p
+                    data-motion="fade-left"
+                    style={`animation-delay: ${i * 150}ms`}
+                  >
+                    {p}
+                  </p>
+                );
+              })
+            }
+          </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <section class="py-8 md:py-16 relative">
       <div class="flex justify-center px-4">
         <div class="w-full md:w-10/12" data-motion="zoom-in">
@@ -373,53 +411,6 @@ function parseParagraphs(text: string | null | undefined) {
               style="animation-delay: 300ms"
             >
             </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="relative overflow-visible pb-12 bg-stone-50 py-8">
-      {
-        homepage.section4Title && (
-          <div class="flex justify-center px-4 mb-8">
-            <div class="w-11/12 md:w-8/12 xl:w-6/12">
-              <h2
-                class="text-3xl md:text-4xl font-black mb-6 text-gray-900 border-b-2 border-red-500 pb-2 inline-block"
-                data-motion="fade-right"
-              >
-                {homepage.section4Title}
-              </h2>
-            </div>
-          </div>
-        )
-      }
-      <div class="flex justify-center px-4">
-        <div class="w-11/12 md:w-8/12 xl:w-6/12">
-          <div
-            class="text-lg md:text-xl text-gray-800 space-y-6 font-serif leading-relaxed"
-          >
-            {
-              parseParagraphs(homepage.textSection4).map((p, i) => {
-                const borderColors = [
-                  "",
-                  "text-red-600 font-semibold",
-                  "text-blue-600 font-semibold",
-                  "",
-                  "",
-                  "text-emerald-600 font-semibold",
-                  "text-stone-600 font-semibold",
-                ];
-                return (
-                  <p
-                    data-motion="fade-left"
-                    style={`animation-delay: ${i * 150}ms`}
-                    class={borderColors[i] ? `pl-6 ${borderColors[i]}` : ""}
-                  >
-                    {p}
-                  </p>
-                );
-              })
-            }
           </div>
         </div>
       </div>
@@ -467,60 +458,66 @@ function parseParagraphs(text: string | null | undefined) {
       </div>
     </section>
 
-    <section class="py-8 md:py-16 relative bg-zinc-100/60 overflow-hidden">
-      <div class="flex justify-center px-4">
-        <div class="w-full md:w-10/12">
-          <div
-            class="relative w-full h-100 md:h-150 flex items-center justify-center overflow-visible"
-          >
-            <div
-              class="absolute w-64 h-64 md:w-125 md:h-125 bg-yellow-100 rounded-full flex items-center justify-center z-0 animate-pulse"
-            >
-            </div>
-            <div
-              class="absolute bottom-20 left-10 w-24 h-24 md:w-32 md:h-32 bg-green-500 rounded-tl-full rounded-br-full rotate-15 opacity-70 z-0"
-            >
-            </div>
+    <!-- Graphic Placeholders Section (Seamless Portrait Editorial Grid) -->
+    <section class="relative overflow-hidden">
 
+      <div class="flex justify-center px-4 relative z-10">
+        <div class="w-full">
+          <div
+            class="relative w-full h-112 md:h-160 flex items-center justify-center overflow-visible"
+          >
+            <!-- Graphic 2A (Adapts layout automatically based on presence of Graphic 2B) -->
             <div
-              class="absolute w-56 md:w-96 aspect-4/3 bg-gray-300 border-8 md:border-12 border-[#eccb2f] shadow-lg rotate-4 translate-x-12 translate-y-10 md:translate-x-20 md:translate-y-16 flex items-center justify-center z-10 transition-transform duration-300 hover:scale-105 hover:-rotate-2 hover:z-40 cursor-pointer overflow-hidden"
-              data-motion="fade-left"
+              class={`absolute w-100 aspect-[4/5] bg-stone-100 border-4 border-gray-900 shadow-xl flex items-center justify-center z-10 transition-all duration-500 ease-out cursor-pointer overflow-hidden
+                ${homepage.graphic2B 
+                  ? 'rotate-3 translate-x-10 translate-y-8 sm:translate-x-16 sm:translate-y-12 hover:-rotate-1 hover:translate-x-12 hover:translate-y-10' 
+                  : 'rotate-2 hover:rotate-0 shadow-2xl'
+                }
+              `}
+              data-motion={homepage.graphic2B ? "fade-left" : "zoom-in"}
               style="animation-delay: 200ms"
             >
-              {
-                homepage.graphic2A ? (
+              <div class="relative w-full h-full group">
+                {homepage.graphic2A ? (
                   <img
                     src={homepage.graphic2A}
-                    alt="Graphic 2A"
-                    class="w-full h-full object-cover"
+                    alt="Graphic Showcase 2A"
+                    class="w-full h-full object-cover grayscale contrast-110 group-hover:grayscale-0 transition-all duration-700 ease-out"
                   />
                 ) : (
-                  <span class="text-gray-500 font-medium text-xs md:text-sm text-center px-2">
-                    Graphic Placeholder 2A
-                  </span>
-                )
-              }
+                  <div class="w-full h-full flex flex-col items-center justify-center text-gray-500 font-sans p-6 text-center">
+                    <svg class="w-8 h-8 text-gray-400 mb-2" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 017.5 0z" />
+                    </svg>
+                    <span class="text-xs font-bold uppercase tracking-widest text-gray-400">Graphic 2A</span>
+                  </div>
+                )}
+                <div class="absolute bottom-4 left-4 bg-zinc-900/95 backdrop-blur-xs text-white py-1.5 px-3 text-[9px] font-mono tracking-widest uppercase opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xs">
+                  {homepage.graphic2ACaption || "Dokumen Lampiran // A"}
+                </div>
+              </div>
             </div>
 
-            <div
-              class="absolute w-52 md:w-80 aspect-3/4 bg-gray-400 border-8 md:border-12 border-[#eccb2f] shadow-2xl -rotate-4 -translate-x-16 -translate-y-4 md:-translate-x-28 md:-translate-y-8 flex items-center justify-center z-20 transition-transform duration-300 hover:scale-105 hover:rotate-2 hover:z-40 cursor-pointer overflow-hidden"
-              data-motion="fade-right"
-              style="animation-delay: 400ms"
-            >
-              {
-                homepage.graphic2B ? (
+            <!-- Graphic 2B (Rendered conditionally from CMS data) -->
+            {homepage.graphic2B && (
+              <div
+                class="absolute w-100 aspect-[4/5] bg-stone-200 border-4 border-gray-900 shadow-2xl -rotate-3 -translate-x-12 -translate-y-6 sm:-translate-x-20 sm:-translate-y-10 flex items-center justify-center z-20 transition-all duration-500 ease-out cursor-pointer overflow-hidden hover:rotate-1 hover:-translate-x-16 hover:-translate-y-8"
+                data-motion="fade-right"
+                style="animation-delay: 400ms"
+              >
+                <div class="relative w-full h-full group">
                   <img
                     src={homepage.graphic2B}
-                    alt="Graphic 2B"
-                    class="w-full h-full object-cover"
+                    alt="Graphic Showcase 2B"
+                    class="w-full h-full object-cover grayscale contrast-110 group-hover:grayscale-0 transition-all duration-700 ease-out"
                   />
-                ) : (
-                  <span class="text-gray-700 font-medium text-xs md:text-sm text-center px-2">
-                    Graphic Placeholder 2B
-                  </span>
-                )
-              }
-            </div>
+                  <div class="absolute bottom-4 left-4 bg-zinc-900/95 backdrop-blur-xs text-white py-1.5 px-3 text-[9px] font-mono tracking-widest uppercase opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xs">
+                    {homepage.graphic2BCaption || "Dokumen Lampiran // B"}
+                  </div>
+                </div>
+              </div>
+            )}
+
           </div>
         </div>
       </div>
@@ -593,28 +590,31 @@ function parseParagraphs(text: string | null | undefined) {
       </div>
     </section>
 
-    <section
-      class="relative overflow-visible pb-12 bg-gray-900 text-white py-16 rounded-t-[50px]"
-    >
+    <!-- Section 8 (Narrative Conclusion / Call to Action Wrap) -->
+    <section class="relative bg-stone-950 text-white py-24 px-4 sm:px-6 rounded-t-[40px] md:rounded-t-[60px] overflow-hidden">
+      <!-- Minimalist geometric accent behind the dark block -->
+      <div class="absolute -right-16 -bottom-16 w-64 h-64 border border-white/5 rounded-full pointer-events-none"></div>
+      
       {
         homepage.section8Title && (
-          <div class="flex justify-center px-4 mb-8">
-            <div class="w-11/12 md:w-8/12 xl:w-6/12">
+          <div class="flex justify-center px-4 mb-12">
+            <div class="w-11/12 md:w-8/12 xl:w-6/12 text-center">
               <h2
-                class="text-3xl md:text-4xl font-black mb-6 text-white border-b-2 border-yellow-400 pb-2 inline-block"
-                data-motion="fade-right"
+                class="text-3xl md:text-4xl font-serif font-black tracking-tight mb-2 text-white inline-block"
+                data-motion="fade-up"
               >
                 {homepage.section8Title}
               </h2>
+              <div class="w-12 h-1 bg-yellow-400 mx-auto mt-4 rounded-full"></div>
             </div>
           </div>
         )
       }
+
       <div class="flex justify-center px-4">
         <div class="w-11/12 md:w-8/12 xl:w-6/12">
-          <div
-            class="text-lg md:text-xl text-gray-300 space-y-6 font-serif leading-relaxed"
-          >
+          <!-- Main Narrative Conclusion Layout -->
+          <div class="text-lg md:text-xl text-stone-300 space-y-8 font-serif leading-relaxed antialiased">
             {
               parseParagraphs(homepage.textSection8).map((p, i) => {
                 const isYellow = p.trim().startsWith("“") || p.trim().startsWith('"');
@@ -622,7 +622,7 @@ function parseParagraphs(text: string | null | undefined) {
                   <p
                     data-motion={isYellow ? "zoom-in" : "fade-up"}
                     style={`animation-delay: ${100 + i * 150}ms`}
-                    class={isYellow ? "text-yellow-400 font-medium" : ""}
+                    class={isYellow ? "text-xl md:text-2xl text-yellow-400 font-medium pl-6 border-l-2 border-yellow-400/40 italic" : ""}
                   >
                     {p}
                   </p>
@@ -634,56 +634,99 @@ function parseParagraphs(text: string | null | undefined) {
       </div>
     </section>
 
-    <section
-      class="relative overflow-visible pb-20 pt-12 border-t border-gray-800 bg-gray-900 text-gray-400"
-    >
-      <div class="flex justify-center px-4">
-        <div class="w-11/12 md:w-8/12 xl:w-6/12 text-center text-sm space-y-8">
-          <div class="space-y-4 text-gray-300 font-medium tracking-wide">
-            {
-              parseParagraphs(homepage.footerMessage).map((p, i) => (
-                <p data-motion="fade-in" style={`animation-delay: ${200 + i * 100}ms`}>
-                  {p}
-                </p>
-              ))
-            }
-          </div>
-
-          <div
-            class="w-24 h-px bg-gray-700 mx-auto"
-            data-motion="fade-in"
-            style="animation-delay: 300ms"
-          >
-          </div>
-
-          <div
-            class="space-y-3 text-xs text-gray-500 font-sans"
-            data-motion="fade-in"
-            style="animation-delay: 400ms"
-          >
-            {
-              homepage.creditsText && (
-                <p>
-                  <span class="font-semibold text-gray-400">Credits:</span>{" "}
-                  {homepage.creditsText}
-                </p>
-              )
-            }
-
-            {
-              homepage.aiDisclaimer && (
-                <p>
-                  <span class="font-semibold text-gray-400">Disclaimer:</span>{" "}
-                  {homepage.aiDisclaimer}
-                </p>
-              )
-            }
-
-            <p class="pt-4">
-              &copy; {new Date().getFullYear()} Tiga Cerita, Satu Realitas. All rights reserved.
-            </p>
-          </div>
+    <!-- Dynamic Section: Editorial Credits Board -->
+    <section class="bg-stone-950 text-stone-400 py-16 border-t border-stone-900 px-4 sm:px-6">
+      <div class="max-w-4xl mx-auto border border-stone-800 rounded-3xl p-8 md:p-12 bg-stone-900/30 relative overflow-hidden" data-motion="fade-up">
+        
+        <!-- Dynamic Header Ribbon -->
+        <div class="flex items-center gap-3 mb-10 border-b border-stone-800 pb-6">
+          <span class="w-1.5 h-3 bg-red-600 rounded-xs"></span>
+          <h3 class="text-xs font-black tracking-widest text-stone-200 uppercase font-sans">
+            {homepage.creditsTitle || "Tim Redaksi & Produksi"}
+          </h3>
         </div>
+
+        <!-- Asymmetrical Role Grid Layout mapped from CMS -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-8 gap-y-8 font-sans">
+          
+          {homepage.creditWriter && (
+            <div class="space-y-1">
+              <span class="text-[10px] font-bold uppercase tracking-widest text-stone-500 block">Writer</span>
+              <p class="text-sm font-bold text-stone-200">{homepage.creditWriter}</p>
+            </div>
+          )}
+
+          {homepage.creditResearcher && (
+            <div class="space-y-1">
+              <span class="text-[10px] font-bold uppercase tracking-widest text-stone-500 block">Researcher</span>
+              <p class="text-sm font-bold text-stone-200">{homepage.creditResearcher}</p>
+            </div>
+          )}
+
+          {homepage.creditEditor && (
+            <div class="space-y-1">
+              <span class="text-[10px] font-bold uppercase tracking-widest text-stone-500 block">Editor</span>
+              <p class="text-sm font-bold text-stone-200">{homepage.creditEditor}</p>
+            </div>
+          )}
+
+          {homepage.creditVideoDirector && (
+            <div class="space-y-1">
+              <span class="text-[10px] font-bold uppercase tracking-widest text-stone-500 block">Video Director</span>
+              <p class="text-sm font-bold text-stone-200">{homepage.creditVideoDirector}</p>
+            </div>
+          )}
+
+          {homepage.creditVideoEditor && (
+            <div class="space-y-1">
+              <span class="text-[10px] font-bold uppercase tracking-widest text-stone-500 block">Video Editor</span>
+              <p class="text-sm font-bold text-stone-200">{homepage.creditVideoEditor}</p>
+            </div>
+          )}
+
+          {homepage.creditWebEditor && (
+            <div class="space-y-1">
+              <span class="text-[10px] font-bold uppercase tracking-widest text-stone-500 block">Web Editor</span>
+              <p class="text-sm font-bold text-stone-200">{homepage.creditWebEditor}</p>
+            </div>
+          )}
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Clean, High-End Footer Message Section -->
+    <section class="relative bg-stone-950 text-stone-400 pt-8 pb-16 border-t border-stone-900 px-4 sm:px-6">
+      <div class="max-w-4xl mx-auto text-center space-y-8">
+        
+        <!-- Big Closing Message Statement -->
+        <div class="max-w-xl mx-auto space-y-4 text-stone-200 font-serif text-base leading-relaxed italic" data-motion="fade-in">
+          {
+            parseParagraphs(homepage.footerMessage).map((p, i) => (
+              <p style={`animation-delay: ${100 + i * 100}ms`}>
+                {p}
+              </p>
+            ))
+          }
+        </div>
+
+        <div class="w-12 h-px bg-stone-800 mx-auto" data-motion="fade-in" style="animation-delay: 200ms"></div>
+
+        <!-- Disclaimers & Legal Stack -->
+        <div class="max-w-2xl mx-auto space-y-3 text-[11px] font-sans text-stone-400 leading-normal" data-motion="fade-in" style="animation-delay: 300ms">
+          {
+            homepage.aiDisclaimer && (
+              <p>
+                <span class="font-semibold text-stone-300">Disclaimer:</span> {homepage.aiDisclaimer}
+              </p>
+            )
+          }
+
+          <p class="pt-6 font-mono text-[10px] tracking-wider text-stone-500 uppercase">
+            &copy; {new Date().getFullYear()} Tiga Cerita, Satu Realitas. All rights reserved.
+          </p>
+        </div>
+
       </div>
     </section>
   </main>

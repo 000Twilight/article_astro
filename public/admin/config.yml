@@ -21,11 +21,21 @@ collections:
           - { label: "Main Article Title", name: "coverTitle", widget: "text" }
           - { label: "Main Article Intro", name: "coverIntro", widget: "text" }
           - { label: "Cover Image", name: "coverImage", widget: "image", required: false }
+          - { label: "Cover Image Caption", name: "coverCaption", widget: "string" }
           - { label: "YouTube Embed URL", name: "videoUrl", widget: "string" }
           
           # Intro block (SUPAS data context)
           - { label: "Text Section 1 (Intro)", name: "textSection1", widget: "text" }
           
+          # New Editorial Credits Fields
+          - { label: "Credits Section Title", name: "creditsTitle", widget: "string", default: "Tim Redaksi & Produksi" }
+          - { label: "Writer Name(s)", name: "creditWriter", widget: "string", default: "Anginette Yoni" }
+          - { label: "Researcher Name(s)", name: "creditResearcher", widget: "string", default: "Anginette Yoni" }
+          - { label: "Editor Name(s)", name: "creditEditor", widget: "string", default: "Anginette Yoni, Darren Antonio" }
+          - { label: "Video Director Name(s)", name: "creditVideoDirector", widget: "string", default: "Anginette Yoni, Darren Antonio" }
+          - { label: "Video Editor Name(s)", name: "creditVideoEditor", widget: "string", default: "Richard Yohanes" }
+          - { label: "Web Editor Name(s)", name: "creditWebEditor", widget: "string", default: "Mario Richie Lim" }
+
           # Characters Section
           - { label: "Section 2 Title (Characters)", name: "section2Title", widget: "string" }
           - { label: "Text Section 2", name: "textSection2", widget: "text" }
@@ -68,6 +78,9 @@ collections:
           - { label: "Graphic 2A (Left Image)", name: "graphic2A", widget: "image", required: false }
           - { label: "Graphic 2B (Right Image)", name: "graphic2B", widget: "image", required: false }
 
+          - { label: "Graphic 2A Caption", name: "graphic2ACaption", widget: "string" }
+          - { label: "Graphic 2B Caption", name: "graphic2BCaption", widget: "string" }
+
           # Section 6: Pakar
           - { label: "Section 6 Title (Pakar)", name: "section6Title", widget: "string" }
           - { label: "Text Section 6", name: "textSection6", widget: "text" }
@@ -82,5 +95,4 @@ collections:
           
           - { label: "Final Footer Message", name: "footerMessage", widget: "text" }
           - { label: "Final Footer Message", name: "footerMessage", widget: "text" }
-          - { label: "Credits Text", name: "creditsText", widget: "string", default: "Developed & Engineered by US." }
           - { label: "AI Disclaimer", name: "aiDisclaimer", widget: "text", default: "Some visual assets and content components within this article were generated with the assistance of Artificial Intelligence." }
