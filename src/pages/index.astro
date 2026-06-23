@@ -119,7 +119,7 @@ function renderRichText(
                   <img
                     src={homepage.coverImage}
                     alt="Cover Story Image"
-                    class="w-full h-full object-cover grayscale contrast-110 group-hover:grayscale-0 transition-all duration-700"
+                    class="w-full h-full object-cover grayscale-0 md:grayscale contrast-110 md:group-hover:grayscale-0 transition-all duration-700"
                   />
                 ) : (
                   <div class="w-full h-full flex flex-col items-center justify-center text-gray-500 font-sans p-6 text-center">
@@ -433,7 +433,7 @@ function renderRichText(
                     <img
                       src={homepage.graphic2A}
                       alt="Graphic Showcase"
-                      class="w-full h-full object-cover grayscale contrast-110 group-hover:grayscale-0 transition-all duration-700 ease-out"
+                      class="w-full h-full object-cover grayscale-0 md:grayscale contrast-110 md:group-hover:grayscale-0 transition-all duration-700 ease-out"
                     />
                   ) : (
                     <div class="w-full h-full flex flex-col items-center justify-center text-gray-500 font-sans p-6 text-center">
@@ -521,7 +521,7 @@ function renderRichText(
     </section>
 
     <div id="scroll-tracker" class="h-px w-full clear-both"></div>
-    
+
     <!-- Section 8 (Dark Mode Wrap) -->
     <section
       class="relative bg-stone-950 text-white py-24 px-4 sm:px-6 rounded-t-[40px] md:rounded-t-[60px] overflow-hidden"
@@ -824,12 +824,12 @@ function renderRichText(
           if (entry.isIntersecting) {
             if (el.dataset.delay) el.style.transitionDelay = el.dataset.delay;
             el.classList.add("is-visible");
-          // } else {
-          //   if (entry.boundingClientRect.top > 0) {
-          //     el.style.transitionDelay = "0ms";
-          //     el.classList.remove("is-visible");
-          //   }
-          // }
+            // } else {
+            //   if (entry.boundingClientRect.top > 0) {
+            //     el.style.transitionDelay = "0ms";
+            //     el.classList.remove("is-visible");
+            //   }
+            // }
           } else {
             el.style.transitionDelay = "0ms";
             el.classList.remove("is-visible");
