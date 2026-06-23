@@ -1,6 +1,5 @@
 ---
 import "../styles.css";
-import Analytics from '../components/Analytics.astro';
 
 export interface Props {
   title: string;
@@ -9,6 +8,7 @@ export interface Props {
 
 const { title, headerTitle } = Astro.props;
 
+const isProduction = import.meta.env.PROD;
 const gaId = import.meta.env.PUBLIC_GA_ID;
 ---
 
@@ -19,15 +19,30 @@ const gaId = import.meta.env.PUBLIC_GA_ID;
     <meta name="description" content="Astro Longform Layout" />
     <meta name="viewport" content="width=device-width" />
 
-    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
-
+    <script
+      is:inline
+      src="https://identity.netlify.com/v1/netlify-identity-widget.js">
+    </script>
+    
     <script is:inline>
       if (window.location.hash && (window.location.hash.startsWith('#invite_token=') || window.location.hash.startsWith('#recovery_token='))) {
         window.location.href = `/admin/${window.location.hash}`;
       }
     </script>
 
-    <Analytics /> 
+    {isProduction && gaId && (
+      <>
+        <script async src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`} is:inline></script>
+        <script define:vars={{ gaId }} is:inline>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', gaId);
+
+          console.log('Google Analytics initialized');
+        </script>
+      </>
+    )}
 
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
