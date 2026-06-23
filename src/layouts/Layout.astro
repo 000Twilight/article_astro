@@ -1,5 +1,6 @@
 ---
 import "../styles.css";
+import Analytics from '../components/Analytics.astro';
 
 export interface Props {
   title: string;
@@ -7,6 +8,8 @@ export interface Props {
 }
 
 const { title, headerTitle } = Astro.props;
+
+const gaId = import.meta.env.PUBLIC_GA_ID;
 ---
 
 <!doctype html>
@@ -24,15 +27,7 @@ const { title, headerTitle } = Astro.props;
       }
     </script>
 
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-5365NNDRR7" is:inline></script>
-    <script is:inline>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-
-      // This line automatically tracks the page view
-      gtag('config', 'G-5365NNDRR7');
-    </script>
+    <Analytics /> 
 
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
