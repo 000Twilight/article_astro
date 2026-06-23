@@ -23,7 +23,7 @@ const gaId = import.meta.env.PUBLIC_GA_ID;
       is:inline
       src="https://identity.netlify.com/v1/netlify-identity-widget.js">
     </script>
-    
+
     <script is:inline>
       if (window.location.hash && (window.location.hash.startsWith('#invite_token=') || window.location.hash.startsWith('#recovery_token='))) {
         window.location.href = `/admin/${window.location.hash}`;
@@ -35,7 +35,8 @@ const gaId = import.meta.env.PUBLIC_GA_ID;
         <script async src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`} is:inline></script>
         <script define:vars={{ gaId }} is:inline>
           window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
+          // function gtag(){dataLayer.push(arguments);}
+          window.gtag = function(){ window.dataLayer.push(arguments); };
           gtag('js', new Date());
           gtag('config', gaId);
 
