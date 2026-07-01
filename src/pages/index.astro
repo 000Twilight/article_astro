@@ -18,6 +18,14 @@ const col2Items = timelineData.filter((_, i) => i % 2 === 1);
 const col1Rotations = ["-rotate-6", "-rotate-2", "-rotate-3", "-rotate-2"];
 const col2Rotations = ["rotate-6", "rotate-4", "rotate-6", "rotate-3"];
 
+function renderInlineMarkdown(text: string | null | undefined) {
+  if (!text) return "";
+
+  return text
+    .replace(/\*\*(.*?)\*\*/gim, "<strong>$1</strong>")
+    .replace(/\*(.*?)\*/gim, "<em>$1</em>");
+}
+
 // Custom Lightweight Markdown Parser for Astro
 function renderRichText(
   text: string | null | undefined,
@@ -80,7 +88,9 @@ function renderRichText(
             {
               homepage.coverTitle
                 ?.split("\n")
-                .map((line) => <span class="block">{line}</span>)
+                .map((line) => (
+                  <span class="block" set:html={renderInlineMarkdown(line)} />
+                ))
             }
           </h1>
 

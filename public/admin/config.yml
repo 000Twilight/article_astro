@@ -23,7 +23,14 @@ collections:
               name: 'headerTitle',
               widget: 'string'
             }
-          - { label: 'Main Article Title', name: 'coverTitle', widget: 'text' }
+          - {
+              label: 'Main Article Title',
+              name: 'coverTitle',
+              widget: 'markdown',
+              buttons: ['bold', 'italic'],
+              editor_components: [],
+              modes: ['rich_text']
+            }
           - { label: 'Main Article Intro', name: 'coverIntro', widget: 'text' }
           - {
               label: 'Cover Image',
