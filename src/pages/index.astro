@@ -750,7 +750,7 @@ const showFooter =
 
 <style is:global>
   [data-motion] {
-    opacity: 0;
+    /* opacity: 0; */
     transition-duration: 0.5s;
   }
   [data-motion="fade-in"] {
@@ -906,6 +906,7 @@ const showFooter =
           `story-content-${targetIndex}`,
         );
 
+        // 1. If clicking the already active character (Deselect)
         if (row.classList.contains("is-active")) {
           row.classList.remove("is-active");
           if (targetContent) {
@@ -914,14 +915,25 @@ const showFooter =
               "translate-y-4",
               "pointer-events-none",
             );
+            // Wait for the fade-out transition to finish before hiding it from layout
+            setTimeout(() => targetContent.classList.add("hidden"), 500); 
           }
-          placeholder?.classList.remove("opacity-0", "pointer-events-none");
+          
+          placeholder?.classList.remove("hidden");
+          // Slight delay to allow display:block to register before fading in
+          requestAnimationFrame(() => {
+            placeholder?.classList.remove("opacity-0", "pointer-events-none");
+          });
           return;
         }
 
+        // 2. If clicking a new character
         rows.forEach((r) => r.classList.remove("is-active"));
+        
+        // Hide all other stories instantly
         storyContents.forEach((content) => {
           content.classList.add(
+            "hidden",
             "opacity-0",
             "translate-y-4",
             "pointer-events-none",
@@ -929,23 +941,27 @@ const showFooter =
         });
 
         row.classList.add("is-active");
-        placeholder?.classList.add("opacity-0", "pointer-events-none");
+        placeholder?.classList.add("hidden", "opacity-0", "pointer-events-none");
 
+        // Show the target story
         if (targetContent) {
-          targetContent.classList.remove(
-            "opacity-0",
-            "translate-y-4",
-            "pointer-events-none",
-          );
+          // Remove display:none first so the element is back in the DOM flow
+          targetContent.classList.remove("hidden"); 
+          
           const scrollableArea =
             targetContent.querySelector(".overflow-y-auto");
           if (scrollableArea) scrollableArea.scrollTop = 0;
+          
+          // Use nested requestAnimationFrame to ensure the browser paints the 
+          // un-hidden element BEFORE triggering the opacity transition
           requestAnimationFrame(() => {
-            targetContent.classList.remove(
-              "opacity-0",
-              "translate-y-4",
-              "pointer-events-none",
-            );
+            requestAnimationFrame(() => {
+              targetContent.classList.remove(
+                "opacity-0",
+                "translate-y-4",
+                "pointer-events-none",
+              );
+            });
           });
         }
       });
