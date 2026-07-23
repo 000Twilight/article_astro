@@ -21,7 +21,8 @@ collections:
           - {
               label: 'Header Navigation Title',
               name: 'headerTitle',
-              widget: 'string'
+              widget: 'string',
+              required: false
             }
           - {
               label: 'Main Article Title',
@@ -29,9 +30,15 @@ collections:
               widget: 'markdown',
               buttons: ['bold', 'italic'],
               editor_components: [],
-              modes: ['rich_text']
+              modes: ['rich_text'],
+              required: false
             }
-          - { label: 'Main Article Intro', name: 'coverIntro', widget: 'text' }
+          - {
+              label: 'Main Article Intro',
+              name: 'coverIntro',
+              widget: 'text',
+              required: false
+            }
           - {
               label: 'Cover Image',
               name: 'coverImage',
@@ -41,9 +48,15 @@ collections:
           - {
               label: 'Cover Image Caption',
               name: 'coverCaption',
-              widget: 'string'
+              widget: 'string',
+              required: false
             }
-          - { label: 'YouTube Embed URL', name: 'videoUrl', widget: 'string' }
+          - {
+              label: 'YouTube Embed URL',
+              name: 'videoUrl',
+              widget: 'string',
+              required: false
+            }
 
           # Intro block (SUPAS data context)
           - {
@@ -60,14 +73,16 @@ collections:
                   'bulleted-list'
                 ],
               editor_components: [],
-              modes: ['rich_text']
+              modes: ['rich_text'],
+              required: false
             }
 
           # Characters Section
           - {
               label: 'Section 2 Title (Characters)',
               name: 'section2Title',
-              widget: 'string'
+              widget: 'string',
+              required: false
             }
           - {
               label: 'Text Section 2',
@@ -83,22 +98,25 @@ collections:
                   'bulleted-list'
                 ],
               editor_components: [],
-              modes: ['rich_text']
+              modes: ['rich_text'],
+              required: false
             }
 
           - label: 'Character Stories'
             name: 'characters'
             widget: 'list'
+            required: false
             summary: '{{fields.name}}'
             fields:
-              - { label: 'Name', name: 'name', widget: 'string' }
-              - { label: 'Job Title', name: 'job', widget: 'string' }
-              - { label: 'Age', name: 'age', widget: 'string' }
+              - { label: 'Name', name: 'name', widget: 'string', required: false }
+              - { label: 'Job Title', name: 'job', widget: 'string', required: false }
+              - { label: 'Age', name: 'age', widget: 'string', required: false }
               - {
                   label: 'Theme Color',
                   name: 'color',
                   widget: 'select',
-                  options: ['bg-blue-500', 'bg-pink-500', 'bg-emerald-500']
+                  options: ['bg-blue-500', 'bg-pink-500', 'bg-emerald-500'],
+                  required: false
                 }
               - {
                   label: 'Profile Image',
@@ -106,22 +124,24 @@ collections:
                   widget: 'image',
                   required: false
                 }
-              - { label: 'Full Story', name: 'story', widget: 'text' }
+              - { label: 'Full Story', name: 'story', widget: 'text', required: false }
 
-          # Timeline (Keeping it in case you still want to use it)
+          # Timeline
           - {
               label: 'Show Timeline',
               name: 'showTimeline',
               widget: 'boolean',
-              default: false
+              default: false,
+              required: false
             }
           - label: 'Timeline Events'
             name: 'timeline'
             widget: 'list'
+            required: false
             summary: '{{fields.year}}'
             fields:
-              - { label: 'Year / Heading', name: 'year', widget: 'string' }
-              - { label: 'Description', name: 'text', widget: 'text' }
+              - { label: 'Year / Heading', name: 'year', widget: 'string', required: false }
+              - { label: 'Description', name: 'text', widget: 'text', required: false }
               - {
                   label: 'Timeline Image',
                   name: 'image',
@@ -133,7 +153,8 @@ collections:
           - {
               label: 'Section 3 Title (Harapan)',
               name: 'section3Title',
-              widget: 'string'
+              widget: 'string',
+              required: false
             }
           - {
               label: 'Text Section 3',
@@ -149,14 +170,16 @@ collections:
                   'bulleted-list'
                 ],
               editor_components: [],
-              modes: ['rich_text']
+              modes: ['rich_text'],
+              required: false
             }
 
           # Section 4: Batasan Kerja
           - {
               label: 'Section 4 Title (Batasan)',
               name: 'section4Title',
-              widget: 'string'
+              widget: 'string',
+              required: false
             }
           - {
               label: 'Text Section 4',
@@ -172,14 +195,16 @@ collections:
                   'bulleted-list'
                 ],
               editor_components: [],
-              modes: ['rich_text']
+              modes: ['rich_text'],
+              required: false
             }
 
           # Section 5: Tekanan
           - {
               label: 'Section 5 Title (Tekanan)',
               name: 'section5Title',
-              widget: 'string'
+              widget: 'string',
+              required: false
             }
           - {
               label: 'Text Section 5',
@@ -195,7 +220,8 @@ collections:
                   'bulleted-list'
                 ],
               editor_components: [],
-              modes: ['rich_text']
+              modes: ['rich_text'],
+              required: false
             }
 
           # Graphics / Jakpat Data
@@ -208,14 +234,16 @@ collections:
           - {
               label: 'Graphic Caption',
               name: 'graphic2ACaption',
-              widget: 'string'
+              widget: 'string',
+              required: false
             }
 
           # Section 6: Pakar
           - {
               label: 'Section 6 Title (Pakar)',
               name: 'section6Title',
-              widget: 'string'
+              widget: 'string',
+              required: false
             }
           - {
               label: 'Text Section 6',
@@ -231,14 +259,16 @@ collections:
                   'bulleted-list'
                 ],
               editor_components: [],
-              modes: ['rich_text']
+              modes: ['rich_text'],
+              required: false
             }
 
           # Section 7: Faktor
           - {
               label: 'Section 7 Title (Faktor)',
               name: 'section7Title',
-              widget: 'string'
+              widget: 'string',
+              required: false
             }
           - {
               label: 'Text Section 7',
@@ -254,14 +284,16 @@ collections:
                   'bulleted-list'
                 ],
               editor_components: [],
-              modes: ['rich_text']
+              modes: ['rich_text'],
+              required: false
             }
 
           # Section 8: Bertahan
           - {
               label: 'Section 8 Title (Bertahan/Dark BG)',
               name: 'section8Title',
-              widget: 'string'
+              widget: 'string',
+              required: false
             }
           - {
               label: 'Text Section 8',
@@ -277,61 +309,71 @@ collections:
                   'bulleted-list'
                 ],
               editor_components: [],
-              modes: ['rich_text']
+              modes: ['rich_text'],
+              required: false
             }
 
-          # New Editorial Credits Fields
+          # Editorial Credits Fields
           - {
               label: 'Credits Section Title',
               name: 'creditsTitle',
               widget: 'string',
-              default: 'Tim Redaksi & Produksi'
+              default: 'Tim Redaksi & Produksi',
+              required: false
             }
           - {
               label: 'Writer Name(s)',
               name: 'creditWriter',
               widget: 'string',
-              default: 'Anginette Yoni'
+              default: 'Anginette Yoni',
+              required: false
             }
           - {
               label: 'Researcher Name(s)',
               name: 'creditResearcher',
               widget: 'string',
-              default: 'Anginette Yoni'
+              default: 'Anginette Yoni',
+              required: false
             }
           - {
               label: 'Editor Name(s)',
               name: 'creditEditor',
               widget: 'string',
-              default: 'Anginette Yoni, Darren Antonio'
+              default: 'Anginette Yoni, Darren Antonio',
+              required: false
             }
           - {
               label: 'Video Director Name(s)',
               name: 'creditVideoDirector',
               widget: 'string',
-              default: 'Anginette Yoni, Darren Antonio'
+              default: 'Anginette Yoni, Darren Antonio',
+              required: false
             }
           - {
               label: 'Video Editor Name(s)',
               name: 'creditVideoEditor',
               widget: 'string',
-              default: 'Richard Yohanes'
+              default: 'Richard Yohanes',
+              required: false
             }
           - {
               label: 'Web Editor Name(s)',
               name: 'creditWebEditor',
               widget: 'string',
-              default: 'Mario Richie Lim'
+              default: 'Mario Richie Lim',
+              required: false
             }
 
           - {
               label: 'Final Footer Message',
               name: 'footerMessage',
-              widget: 'text'
+              widget: 'text',
+              required: false
             }
           - {
               label: 'AI Disclaimer',
               name: 'aiDisclaimer',
               widget: 'text',
-              default: 'Some visual assets and content components within this article were generated with the assistance of Artificial Intelligence.'
+              default: 'Some visual assets and content components within this article were generated with the assistance of Artificial Intelligence.',
+              required: false
             }
