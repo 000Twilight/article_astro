@@ -204,157 +204,149 @@ const showFooter = hasText(homepage.footerMessage) || hasText(homepage.aiDisclai
       )
     }
 
-    {
-      showSection2 && (
-        <section class="relative overflow-hidden bg-white py-24 px-4 sm:px-6">
-          <div class="max-w-6xl mx-auto">
-            <div
-              class="mb-20 border-b border-gray-100 pb-10 flex flex-col md:flex-row md:items-end md:justify-between gap-6"
+    <section class="relative overflow-hidden bg-white py-24 px-4 sm:px-6">
+      <div class="max-w-6xl mx-auto">
+        <div
+          class="mb-20 border-b border-gray-100 pb-10 flex flex-col md:flex-row md:items-end md:justify-between gap-6"
+        >
+          <div class="max-w-xl">
+            <span
+              class="text-xs font-black tracking-widest text-red-500 uppercase block mb-3"
+              >// Profil Tokoh</span
             >
-              <div class="max-w-xl">
-                <span
-                  class="text-xs font-black tracking-widest text-red-500 uppercase block mb-3"
-                  >// Profil Tokoh</span
-                >
-                {hasText(homepage.section2Title) && (
-                  <h2
-                    class="text-4xl md:text-5xl font-serif font-black tracking-tight text-gray-900"
-                  >
-                    {homepage.section2Title}
-                  </h2>
-                )}
-              </div>
-              {hasText(homepage.textSection2) && (
-                <div
-                  class="editorial-prose max-w-md text-gray-500 font-serif text-base leading-relaxed"
-                  set:html={renderRichText(homepage.textSection2, "section2")}
-                />
-              )}
-            </div>
-
-            <div class="flex flex-col lg:flex-row gap-12 items-start">
-              <div class="w-full lg:w-5/12 flex flex-col gap-4">
-                {
-                  homepage.characters &&
-                    homepage.characters.map((char, index) => (
-                      <div
-                        class="character-row group relative bg-gray-50/50 hover:bg-gray-50 p-6 rounded-2xl cursor-pointer border border-transparent transition-all duration-300 select-none flex items-center justify-between"
-                        data-index={index}
-                      >
-                        <div
-                          class={`absolute left-0 top-1/4 bottom-1/4 w-1 ${char.color} rounded-r-full opacity-0 scale-y-50 transition-all duration-300 group-[.is-active]:opacity-100 group-[.is-active]:scale-y-100 group-[.is-active]:top-4 group-[.is-active]:bottom-4`}
-                        />
-                        <div class="flex items-center gap-5 pl-2">
-                          <div class="w-16 h-16 rounded-xl bg-gray-200 overflow-hidden shrink-0 shadow-xs border border-white transition-transform duration-500 group-hover:scale-105 group-[.is-active]:scale-105">
-                            {char.image ? (
-                              <img
-                                src={char.image}
-                                alt={char.name}
-                                class="w-full h-full object-cover"
-                              />
-                            ) : (
-                              <div class="w-full h-full flex items-center justify-center text-gray-400 bg-gray-100">
-                                <span class="font-serif text-lg font-bold">
-                                  {char.name ? char.name[0] : "?"}
-                                </span>
-                              </div>
-                            )}
-                          </div>
-                          <div>
-                            <h3 class="text-xl font-bold text-gray-900 tracking-tight group-hover:text-gray-950">
-                              {char.name}{" "}
-                              <span class="text-sm font-normal text-gray-400 font-serif">
-                                , {char.age}
-                              </span>
-                            </h3>
-                            <p class="text-xs font-semibold tracking-wider text-gray-400 uppercase mt-0.5">
-                              {char.job}
-                            </p>
-                          </div>
-                        </div>
-                        <div class="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center transition-all duration-300 bg-white group-hover:border-gray-400 group-[.is-active]:bg-gray-900 group-[.is-active]:border-gray-900 group-[.is-active]:text-white">
-                          <svg
-                            class="w-4 h-4 transform transition-transform duration-500 -rotate-45 group-[.is-active]:rotate-0"
-                            fill="none"
-                            stroke="currentColor"
-                            stroke-width="2.5"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
-                              d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"
-                            />
-                          </svg>
-                        </div>
-                      </div>
-                    ))
-                }
-              </div>
-
-              <div
-                class="w-full lg:w-7/12 lg:sticky lg:top-8 h-100 sm:h-112.5 bg-gray-50/30 rounded-3xl border border-gray-100 p-8 md:p-12 relative flex items-center justify-center overflow-hidden"
-              >
-                <div
-                  class="absolute inset-0 flex items-center justify-center opacity-[0.02] pointer-events-none select-none"
-                >
-                  <span class="text-[12rem] font-serif font-black">ESSAY</span>
-                </div>
-
-                <div
-                  id="story-placeholder"
-                  class="text-center max-w-xs transition-opacity duration-300 z-10"
-                >
-                  <svg
-                    class="w-8 h-8 text-gray-300 mx-auto mb-4"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="1.5"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25"
-                    ></path>
-                  </svg>
-                  <p
-                    class="text-xs font-bold uppercase tracking-widest text-gray-400"
-                  >
-                    Pilih salah satu tokoh untuk membaca kisah mereka
-                  </p>
-                </div>
-
-                {
-                  homepage.characters &&
-                    homepage.characters.map((char, index) => (
-                      <div
-                        id={`story-content-${index}`}
-                        class="story-content opacity-0 pointer-events-none w-full h-full flex flex-col justify-start transform translate-y-4 transition-all duration-500 ease-out z-10"
-                      >
-                        <div class="flex items-center gap-2 mb-6 shrink-0">
-                          <span class={`w-2 h-2 rounded-full ${char.color}`} />
-                          <span class="text-xs font-bold uppercase tracking-widest text-gray-400">
-                            Catatan Naratif &bull; {char.name}
-                          </span>
-                        </div>
-
-                        <div class="overflow-y-auto pr-2 pb-6 max-h-70 sm:max-h-80 scrollbar-none relative">
-                          <p class="story-text text-gray-700 font-serif text-lg leading-relaxed antialiased first-letter:text-5xl first-letter:font-black first-letter:text-gray-950 first-letter:mr-3 first-letter:float-left first-letter:font-sans first-letter:leading-none">
-                            {char.story}
-                          </p>
-                        </div>
-
-                        <div class="absolute bottom-0 left-0 right-0 h-12 bg-linear-to-t from-gray-50/80 to-transparent pointer-events-none rounded-b-3xl" />
-                      </div>
-                    ))
-                }
-              </div>
-            </div>
+            <h2
+              class="text-4xl md:text-5xl font-serif font-black tracking-tight text-gray-900"
+            >
+              {homepage.section2Title}
+            </h2>
           </div>
-        </section>
-      )
-    }
+          <div
+            class="editorial-prose max-w-md text-gray-500 font-serif text-base leading-relaxed"
+            set:html={renderRichText(homepage.textSection2, "section2")}
+          />
+        </div>
+
+        <div class="flex flex-col lg:flex-row gap-12 items-start">
+          <div class="w-full lg:w-5/12 flex flex-col gap-4">
+            {
+              homepage.characters &&
+                homepage.characters.map((char, index) => (
+                  <div
+                    class="character-row group relative bg-gray-50/50 hover:bg-gray-50 p-6 rounded-2xl cursor-pointer border border-transparent transition-all duration-300 select-none flex items-center justify-between"
+                    data-index={index}
+                  >
+                    <div
+                      class={`absolute left-0 top-1/4 bottom-1/4 w-1 ${char.color} rounded-r-full opacity-0 scale-y-50 transition-all duration-300 group-[.is-active]:opacity-100 group-[.is-active]:scale-y-100 group-[.is-active]:top-4 group-[.is-active]:bottom-4`}
+                    />
+                    <div class="flex items-center gap-5 pl-2">
+                      <div class="w-16 h-16 rounded-xl bg-gray-200 overflow-hidden shrink-0 shadow-xs border border-white transition-transform duration-500 group-hover:scale-105 group-[.is-active]:scale-105">
+                        {char.image ? (
+                          <img
+                            src={char.image}
+                            alt={char.name}
+                            class="w-full h-full object-cover"
+                          />
+                        ) : (
+                          <div class="w-full h-full flex items-center justify-center text-gray-400 bg-gray-100">
+                            <span class="font-serif text-lg font-bold">
+                              {char.name[0]}
+                            </span>
+                          </div>
+                        )}
+                      </div>
+                      <div>
+                        <h3 class="text-xl font-bold text-gray-900 tracking-tight group-hover:text-gray-950">
+                          {char.name}{" "}
+                          <span class="text-sm font-normal text-gray-400 font-serif">
+                            , {char.age}
+                          </span>
+                        </h3>
+                        <p class="text-xs font-semibold tracking-wider text-gray-400 uppercase mt-0.5">
+                          {char.job}
+                        </p>
+                      </div>
+                    </div>
+                    <div class="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center transition-all duration-300 bg-white group-hover:border-gray-400 group-[.is-active]:bg-gray-900 group-[.is-active]:border-gray-900 group-[.is-active]:text-white">
+                      <svg
+                        class="w-4 h-4 transform transition-transform duration-500 -rotate-45 group-[.is-active]:rotate-0"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2.5"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"
+                        />
+                      </svg>
+                    </div>
+                  </div>
+                ))
+            }
+          </div>
+
+          <div
+            class="w-full lg:w-7/12 lg:sticky lg:top-8 h-[400px] sm:h-[450px] bg-gray-50/30 rounded-3xl border border-gray-100 p-8 md:p-12 relative flex items-center justify-center overflow-hidden"
+          >
+            <div
+              class="absolute inset-0 flex items-center justify-center opacity-[0.02] pointer-events-none select-none"
+            >
+              <span class="text-[12rem] font-serif font-black">ESSAY</span>
+            </div>
+
+            <div
+              id="story-placeholder"
+              class="text-center max-w-xs transition-opacity duration-300 z-10"
+            >
+              <svg
+                class="w-8 h-8 text-gray-300 mx-auto mb-4"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25"
+                ></path>
+              </svg>
+              <p
+                class="text-xs font-bold uppercase tracking-widest text-gray-400"
+              >
+                Pilih salah satu tokoh untuk membaca kisah mereka
+              </p>
+            </div>
+
+            {
+              homepage.characters &&
+                homepage.characters.map((char, index) => (
+                  <div
+                    id={`story-content-${index}`}
+                    class="story-content hidden opacity-0 w-full h-full flex flex-col justify-start transform translate-y-4 transition-all duration-500 ease-out z-10"
+                  >
+                    <div class="flex items-center gap-2 mb-6 shrink-0">
+                      <span class={`w-2 h-2 rounded-full ${char.color}`} />
+                      <span class="text-xs font-bold uppercase tracking-widest text-gray-400">
+                        Catatan Naratif &bull; {char.name}
+                      </span>
+                    </div>
+
+                    <div class="overflow-y-auto pr-2 pb-6 max-h-[280px] sm:max-h-[320px] scrollbar-none relative">
+                      <p class="story-text text-gray-700 font-serif text-lg leading-relaxed antialiased first-letter:text-5xl first-letter:font-black first-letter:text-gray-950 first-letter:mr-3 first-letter:float-left first-letter:font-sans first-letter:leading-none">
+                        {char.story}
+                      </p>
+                    </div>
+
+                    <div class="absolute bottom-0 left-0 right-0 h-12 bg-linear-to-t from-gray-50/80 to-transparent pointer-events-none rounded-b-3xl" />
+                  </div>
+                ))
+            }
+          </div>
+        </div>
+      </div>
+    </section>
 
     {
       showSection3 && (
