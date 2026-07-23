@@ -2,14 +2,12 @@
 import Layout from "../layouts/Layout.astro";
 import homepage from "../content/homepage/data.json";
 
-// Type definitions for your layout arrays
 type TimelineItem = {
   year: string;
   text: string;
   image: string | null;
 };
 
-// Explicitly cast the timeline array as TimelineItem[]
 const timelineData = (homepage.timeline || []) as TimelineItem[];
 
 const col1Items = timelineData.filter((_, i) => i % 2 === 0);
@@ -26,34 +24,28 @@ function renderInlineMarkdown(text: string | null | undefined) {
     .replace(/\*(.*?)\*/gim, "<em>$1</em>");
 }
 
-// Custom Lightweight Markdown Parser for Astro
 function renderRichText(
   text: string | null | undefined,
   sectionId: string = "default",
 ) {
   if (!text) return "";
 
-  // Parse Bold and Italic formatting from Decap CMS
   let parsed = text
     .replace(/\*\*(.*?)\*\*/gim, "<strong>$1</strong>")
     .replace(/\*(.*?)\*/gim, "<em>$1</em>");
 
-  // Split into paragraphs
   const paragraphs = parsed.split("\n\n").filter((p) => p.trim() !== "");
 
   return paragraphs
     .map((p, index) => {
-      // Handle Blockquotes (CMS outputs "> text")
       if (p.trim().startsWith(">")) {
         const cleanQuote = p.replace(/^>\s?/gm, "");
         return `<blockquote data-motion="fade-up" style="animation-delay: ${100 + index * 100}ms"><p>${cleanQuote}</p></blockquote>`;
       }
 
-      // Handle specific section layout logic
       let classes = "";
       let motion = "fade-up";
 
-      // Section 7 Alternate Scroll Direction Animation
       if (sectionId === "section7") {
         motion = index % 2 === 0 ? "fade-left" : "fade-right";
       }
@@ -62,6 +54,44 @@ function renderRichText(
     })
     .join("");
 }
+
+function hasText(value: string | null | undefined) {
+  return Boolean(value && value.trim());
+}
+
+function hasItems<T>(value: T[] | null | undefined) {
+  return Array.isArray(value) && value.length > 0;
+}
+
+const showHero =
+  hasText(homepage.coverTitle) ||
+  hasText(homepage.coverIntro) ||
+  hasText(homepage.textSection1) ||
+  hasText(homepage.coverImage) ||
+  hasText(homepage.coverCaption);
+
+const showSection2 =
+  hasText(homepage.section2Title) ||
+  hasText(homepage.textSection2) ||
+  hasItems(homepage.characters);
+
+const showSection3 = hasText(homepage.section3Title) || hasText(homepage.textSection3);
+const showSection4 = hasText(homepage.section4Title) || hasText(homepage.textSection4);
+const showVideoSection = hasText(homepage.videoUrl);
+const showSection5 = hasText(homepage.section5Title) || hasText(homepage.textSection5);
+const showGraphicSection = hasText(homepage.graphic2A) || hasText(homepage.graphic2ACaption);
+const showSection6 = hasText(homepage.section6Title) || hasText(homepage.textSection6);
+const showSection7 = hasText(homepage.section7Title) || hasText(homepage.textSection7);
+const showSection8 = hasText(homepage.section8Title) || hasText(homepage.textSection8);
+const showCredits =
+  hasText(homepage.creditsTitle) ||
+  hasText(homepage.creditWriter) ||
+  hasText(homepage.creditResearcher) ||
+  hasText(homepage.creditEditor) ||
+  hasText(homepage.creditVideoDirector) ||
+  hasText(homepage.creditVideoEditor) ||
+  hasText(homepage.creditWebEditor);
+const showFooter = hasText(homepage.footerMessage) || hasText(homepage.aiDisclaimer);
 ---
 
 <Layout
@@ -69,381 +99,74 @@ function renderRichText(
   headerTitle={homepage.headerTitle}
 >
   <main class="pt-0">
-    <!-- Hero & Introduction Combined Layout -->
-    <section
-      id="cover-section"
-      class="relative w-full min-h-screen bg-linear-to-br from-zinc-50 to-stone-100 flex items-center pt-24 pb-16 px-4 sm:px-8"
-    >
-      <div
-        class="max-w-6xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start"
-      >
-        <!-- Left Content Column -->
-        <div
-          class="lg:col-span-7 flex flex-col justify-center"
-          data-motion="fade-right"
+    {
+      showHero && (
+        <section
+          id="cover-section"
+          class="relative w-full min-h-screen bg-linear-to-br from-zinc-50 to-stone-100 flex items-center pt-24 pb-16 px-4 sm:px-8"
         >
-          <h1
-            class="text-4xl md:text-6xl font-serif font-black text-red-600 tracking-tight leading-none mb-8"
-          >
-            {
-              homepage.coverTitle
-                ?.split("\n")
-                .map((line) => (
-                  <span class="block" set:html={renderInlineMarkdown(line)} />
-                ))
-            }
-          </h1>
-
-          <div class="w-20 h-2 bg-red-600 mb-8 rounded-full"></div>
-
-          <!-- Dynamic Prose Flow -->
           <div
-            class="editorial-prose text-gray-800 font-serif text-lg md:text-xl leading-relaxed antialiased"
+            class="max-w-6xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start"
           >
-            <p
-              class="first-letter:text-6xl first-letter:font-sans first-letter:font-black first-letter:text-red-600 first-letter:mr-3 first-letter:float-left first-letter:leading-none mb-6"
-            >
-              {homepage.coverIntro}
-            </p>
-            <div set:html={renderRichText(homepage.textSection1, "section1")} />
-          </div>
-        </div>
-
-        <!-- Right Content Image Frame Column -->
-        <div
-          class="lg:col-span-5 relative flex flex-col items-center lg:sticky lg:top-24"
-          data-motion="zoom-in"
-          style="animation-delay: 200ms"
-        >
-          <div class="relative w-full max-w-sm aspect-[4/5]">
             <div
-              class="absolute inset-0 bg-[#eccb2f] border-4 border-gray-900 shadow-lg -rotate-3 translate-x-3 translate-y-3 z-0"
+              class="lg:col-span-7 flex flex-col justify-center"
+              data-motion="fade-right"
             >
-            </div>
+              {hasText(homepage.coverTitle) && (
+                <h1
+                  class="text-4xl md:text-6xl font-serif font-black text-red-600 tracking-tight leading-none mb-8"
+                >
+                  {
+                    homepage.coverTitle
+                      ?.split("\n")
+                      .map((line) => (
+                        <span class="block" set:html={renderInlineMarkdown(line)} />
+                      ))
+                  }
+                </h1>
+              )}
 
-            <div
-              class="absolute inset-0 bg-gray-200 border-4 border-gray-900 overflow-hidden rotate-2 group transition-transform duration-500 hover:rotate-0 z-10"
-            >
-              {
-                homepage.coverImage ? (
-                  <img
-                    src={homepage.coverImage}
-                    alt="Cover Story Image"
-                    class="w-full h-full object-cover grayscale-0 md:grayscale contrast-110 md:group-hover:grayscale-0 transition-all duration-700"
-                  />
-                ) : (
-                  <div class="w-full h-full flex flex-col items-center justify-center text-gray-500 font-sans p-6 text-center">
-                    <svg
-                      class="w-8 h-8 text-gray-400 mb-2"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="1.5"
-                      viewBox="0 0 24 24"
+              {(hasText(homepage.coverTitle) && (hasText(homepage.coverIntro) || hasText(homepage.textSection1))) && (
+                <div class="w-20 h-2 bg-red-600 mb-8 rounded-full"></div>
+              )}
+
+              {(hasText(homepage.coverIntro) || hasText(homepage.textSection1)) && (
+                <div
+                  class="editorial-prose text-gray-800 font-serif text-lg md:text-xl leading-relaxed antialiased"
+                >
+                  {hasText(homepage.coverIntro) && (
+                    <p
+                      class="first-letter:text-6xl first-letter:font-sans first-letter:font-black first-letter:text-red-600 first-letter:mr-3 first-letter:float-left first-letter:leading-none mb-6"
                     >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 017.5 0z"
-                      />
-                    </svg>
-                    <span class="text-xs font-bold uppercase tracking-widest text-gray-400">
-                      Visual Struktur Demografi
-                    </span>
-                  </div>
-                )
-              }
-            </div>
-          </div>
-
-          <span
-            class="text-xs uppercase tracking-wider text-gray-400 font-sans mt-8 text-center block border-t border-dashed border-gray-200 pt-4 w-full max-w-sm"
-          >
-            {homepage.coverCaption}
-          </span>
-        </div>
-      </div>
-    </section>
-
-    <!-- Section 2: Character Introductions -->
-    <section class="relative overflow-hidden bg-white py-24 px-4 sm:px-6">
-      <div class="max-w-6xl mx-auto">
-        <div
-          class="mb-20 border-b border-gray-100 pb-10 flex flex-col md:flex-row md:items-end md:justify-between gap-6"
-        >
-          <div class="max-w-xl">
-            <span
-              class="text-xs font-black tracking-widest text-red-500 uppercase block mb-3"
-              >// Profil Tokoh</span
-            >
-            <h2
-              class="text-4xl md:text-5xl font-serif font-black tracking-tight text-gray-900"
-            >
-              {homepage.section2Title}
-            </h2>
-          </div>
-          <div
-            class="editorial-prose max-w-md text-gray-500 font-serif text-base leading-relaxed"
-            set:html={renderRichText(homepage.textSection2, "section2")}
-          />
-        </div>
-
-        <div class="flex flex-col lg:flex-row gap-12 items-start">
-          <div class="w-full lg:w-5/12 flex flex-col gap-4">
-            {
-              homepage.characters &&
-                homepage.characters.map((char, index) => (
-                  <div
-                    class="character-row group relative bg-gray-50/50 hover:bg-gray-50 p-6 rounded-2xl cursor-pointer border border-transparent transition-all duration-300 select-none flex items-center justify-between"
-                    data-index={index}
-                  >
-                    <div
-                      class={`absolute left-0 top-1/4 bottom-1/4 w-1 ${char.color} rounded-r-full opacity-0 scale-y-50 transition-all duration-300 group-[.is-active]:opacity-100 group-[.is-active]:scale-y-100 group-[.is-active]:top-4 group-[.is-active]:bottom-4`}
-                    />
-                    <div class="flex items-center gap-5 pl-2">
-                      <div class="w-16 h-16 rounded-xl bg-gray-200 overflow-hidden shrink-0 shadow-xs border border-white transition-transform duration-500 group-hover:scale-105 group-[.is-active]:scale-105">
-                        {char.image ? (
-                          <img
-                            src={char.image}
-                            alt={char.name}
-                            class="w-full h-full object-cover"
-                          />
-                        ) : (
-                          <div class="w-full h-full flex items-center justify-center text-gray-400 bg-gray-100">
-                            <span class="font-serif text-lg font-bold">
-                              {char.name[0]}
-                            </span>
-                          </div>
-                        )}
-                      </div>
-                      <div>
-                        <h3 class="text-xl font-bold text-gray-900 tracking-tight group-hover:text-gray-950">
-                          {char.name}{" "}
-                          <span class="text-sm font-normal text-gray-400 font-serif">
-                            , {char.age}
-                          </span>
-                        </h3>
-                        <p class="text-xs font-semibold tracking-wider text-gray-400 uppercase mt-0.5">
-                          {char.job}
-                        </p>
-                      </div>
-                    </div>
-                    <div class="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center transition-all duration-300 bg-white group-hover:border-gray-400 group-[.is-active]:bg-gray-900 group-[.is-active]:border-gray-900 group-[.is-active]:text-white">
-                      <svg
-                        class="w-4 h-4 transform transition-transform duration-500 -rotate-45 group-[.is-active]:rotate-0"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2.5"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"
-                        />
-                      </svg>
-                    </div>
-                  </div>
-                ))
-            }
-          </div>
-
-          <div
-            class="w-full lg:w-7/12 lg:sticky lg:top-8 h-[400px] sm:h-[450px] bg-gray-50/30 rounded-3xl border border-gray-100 p-8 md:p-12 relative flex items-center justify-center overflow-hidden"
-          >
-            <div
-              class="absolute inset-0 flex items-center justify-center opacity-[0.02] pointer-events-none select-none"
-            >
-              <span class="text-[12rem] font-serif font-black">ESSAY</span>
+                      {homepage.coverIntro}
+                    </p>
+                  )}
+                  {hasText(homepage.textSection1) && (
+                    <div set:html={renderRichText(homepage.textSection1, "section1")} />
+                  )}
+                </div>
+              )}
             </div>
 
             <div
-              id="story-placeholder"
-              class="text-center max-w-xs transition-opacity duration-300 z-10"
-            >
-              <svg
-                class="w-8 h-8 text-gray-300 mx-auto mb-4"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.5"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25"
-                ></path>
-              </svg>
-              <p
-                class="text-xs font-bold uppercase tracking-widest text-gray-400"
-              >
-                Pilih salah satu tokoh untuk membaca kisah mereka
-              </p>
-            </div>
-
-            {
-              homepage.characters &&
-                homepage.characters.map((char, index) => (
-                  <div
-                    id={`story-content-${index}`}
-                    class="story-content hidden opacity-0 w-full h-full flex flex-col justify-start transform translate-y-4 transition-all duration-500 ease-out z-10"
-                  >
-                    <div class="flex items-center gap-2 mb-6 shrink-0">
-                      <span class={`w-2 h-2 rounded-full ${char.color}`} />
-                      <span class="text-xs font-bold uppercase tracking-widest text-gray-400">
-                        Catatan Naratif &bull; {char.name}
-                      </span>
-                    </div>
-
-                    <div class="overflow-y-auto pr-2 pb-6 max-h-[280px] sm:max-h-[320px] scrollbar-none relative">
-                      <p class="story-text text-gray-700 font-serif text-lg leading-relaxed antialiased first-letter:text-5xl first-letter:font-black first-letter:text-gray-950 first-letter:mr-3 first-letter:float-left first-letter:font-sans first-letter:leading-none">
-                        {char.story}
-                      </p>
-                    </div>
-
-                    <div class="absolute bottom-0 left-0 right-0 h-12 bg-linear-to-t from-gray-50/80 to-transparent pointer-events-none rounded-b-3xl" />
-                  </div>
-                ))
-            }
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Section 3: Harapan -->
-    <section class="relative overflow-visible py-12">
-      {
-        homepage.section3Title && (
-          <div class="flex justify-center px-4 mb-8">
-            <div class="w-11/12 md:w-8/12 xl:w-6/12">
-              <h2
-                class="text-3xl md:text-4xl font-black mb-6 text-gray-900 border-b-2 border-red-500 pb-2 inline-block"
-                data-motion="fade-right"
-              >
-                {homepage.section3Title}
-              </h2>
-            </div>
-          </div>
-        )
-      }
-      <div class="flex justify-center px-4">
-        <div class="w-11/12 md:w-8/12 xl:w-6/12">
-          <div
-            class="editorial-prose text-lg md:text-xl text-gray-800 font-serif leading-relaxed"
-            set:html={renderRichText(homepage.textSection3, "section3")}
-          />
-        </div>
-      </div>
-    </section>
-
-    <!-- Section 4 -->
-    <section class="relative overflow-visible pb-12 bg-stone-50 py-8">
-      {
-        homepage.section4Title && (
-          <div class="flex justify-center px-4 mb-8">
-            <div class="w-11/12 md:w-8/12 xl:w-6/12">
-              <h2
-                class="text-3xl md:text-4xl font-black mb-6 text-gray-900 border-b-2 border-red-500 pb-2 inline-block"
-                data-motion="fade-right"
-              >
-                {homepage.section4Title}
-              </h2>
-            </div>
-          </div>
-        )
-      }
-      <div class="flex justify-center px-4">
-        <div class="w-11/12 md:w-8/12 xl:w-6/12">
-          <div
-            class="editorial-prose text-lg md:text-xl text-gray-800 font-serif leading-relaxed"
-            set:html={renderRichText(homepage.textSection4, "section4")}
-          />
-        </div>
-      </div>
-    </section>
-
-    <!-- Video Section -->
-    <section class="py-8 md:py-16 relative">
-      <div class="flex justify-center px-4">
-        <div class="w-full md:w-10/12" data-motion="zoom-in">
-          <div
-            class="relative w-full aspect-video flex items-center justify-center overflow-visible p-4 md:p-8"
-          >
-            <div
-              class="w-full h-full bg-gray-800 border-8 md:border-16 border-[#eccb2f] shadow-2xl rotate-1 flex items-center justify-center group relative overflow-hidden z-10 hover:rotate-0 transition-transform duration-500"
-            >
-              {
-                homepage.videoUrl ? (
-                  <iframe
-                    class="w-full h-full absolute inset-0 z-20"
-                    src={homepage.videoUrl}
-                    title="YouTube video player"
-                    frameborder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                    allowfullscreen
-                  />
-                ) : (
-                  <div class="w-16 h-16 md:w-24 md:h-24 bg-white/90 rounded-full flex items-center justify-center z-20 group-hover:scale-110 transition-transform cursor-pointer shadow-lg">
-                    <div class="ml-2 w-0 h-0 border-t-10 border-t-transparent border-l-16 border-l-red-600 border-b-10 border-b-transparent md:border-t-14 md:border-l-24 md:border-b-14" />
-                  </div>
-                )
-              }
-            </div>
-            <div
-              class="absolute inset-4 md:inset-8 bg-[#eccb2f]/30 -rotate-2 rounded z-0"
-              data-motion="fade-in"
-              style="animation-delay: 300ms"
-            >
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Section 5 -->
-    <section class="relative overflow-visible pb-12 pt-8">
-      {
-        homepage.section5Title && (
-          <div class="flex justify-center px-4 mb-8">
-            <div class="w-11/12 md:w-8/12 xl:w-6/12">
-              <h2
-                class="text-3xl md:text-4xl font-black mb-6 border-b-2 border-red-500 pb-2 inline-block"
-                data-motion="zoom-in"
-              >
-                {homepage.section5Title}
-              </h2>
-            </div>
-          </div>
-        )
-      }
-      <div class="flex justify-center px-4">
-        <div class="w-11/12 md:w-8/12 xl:w-6/12">
-          <div
-            class="editorial-prose text-lg md:text-xl text-gray-800 font-serif leading-relaxed"
-            set:html={renderRichText(homepage.textSection5, "section5")}
-          />
-        </div>
-      </div>
-    </section>
-
-    <!-- Graphic Placeholder Section (Fixed Single Portrait Layout) -->
-    <section class="relative overflow-hidden">
-      <div class="flex justify-center px-4 relative z-10">
-        <div class="w-full">
-          <div
-            class="relative w-full h-112 md:h-160 flex items-center justify-center overflow-visible"
-          >
-            <div
-              class="relative w-88 aspect-[4/5] bg-stone-100 border-4 border-gray-900 shadow-2xl rotate-2 hover:rotate-0 transition-transform duration-500 ease-out cursor-pointer overflow-hidden z-10"
+              class="lg:col-span-5 relative flex flex-col items-center lg:sticky lg:top-24"
               data-motion="zoom-in"
               style="animation-delay: 200ms"
             >
-              <div class="relative w-full h-full group">
-                {
-                  homepage.graphic2A ? (
+              <div class="relative w-full max-w-sm aspect-4/5">
+                <div
+                  class="absolute inset-0 bg-[#eccb2f] border-4 border-gray-900 shadow-lg -rotate-3 translate-x-3 translate-y-3 z-0"
+                >
+                </div>
+
+                <div
+                  class="absolute inset-0 bg-gray-200 border-4 border-gray-900 overflow-hidden rotate-2 group transition-transform duration-500 hover:rotate-0 z-10"
+                >
+                  {hasText(homepage.coverImage) ? (
                     <img
-                      src={homepage.graphic2A}
-                      alt="Graphic Showcase"
-                      class="w-full h-full object-cover grayscale-0 md:grayscale contrast-110 md:group-hover:grayscale-0 transition-all duration-700 ease-out"
+                      src={homepage.coverImage}
+                      alt="Cover Story Image"
+                      class="w-full h-full object-cover grayscale-0 md:grayscale contrast-110 md:group-hover:grayscale-0 transition-all duration-700"
                     />
                   ) : (
                     <div class="w-full h-full flex flex-col items-center justify-center text-gray-500 font-sans p-6 text-center">
@@ -461,257 +184,608 @@ function renderRichText(
                         />
                       </svg>
                       <span class="text-xs font-bold uppercase tracking-widest text-gray-400">
-                        Graphic 2A
+                        Visual Struktur Demografi
                       </span>
                     </div>
-                  )
-                }
-                <div
-                  class="absolute bottom-4 left-4 bg-zinc-900/95 backdrop-blur-xs text-white py-1.5 px-3 text-[9px] font-mono tracking-widest uppercase opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xs"
+                  )}
+                </div>
+              </div>
+
+              {hasText(homepage.coverCaption) && (
+                <span
+                  class="text-xs uppercase tracking-wider text-gray-400 font-sans mt-8 text-center block border-t border-dashed border-gray-200 pt-4 w-full max-w-sm"
                 >
-                  {homepage.graphic2ACaption || "Sumber: Jakpat"}
+                  {homepage.coverCaption}
+                </span>
+              )}
+            </div>
+          </div>
+        </section>
+      )
+    }
+
+    {
+      showSection2 && (
+        <section class="relative overflow-hidden bg-white py-24 px-4 sm:px-6">
+          <div class="max-w-6xl mx-auto">
+            <div
+              class="mb-20 border-b border-gray-100 pb-10 flex flex-col md:flex-row md:items-end md:justify-between gap-6"
+            >
+              <div class="max-w-xl">
+                <span
+                  class="text-xs font-black tracking-widest text-red-500 uppercase block mb-3"
+                  >// Profil Tokoh</span
+                >
+                {hasText(homepage.section2Title) && (
+                  <h2
+                    class="text-4xl md:text-5xl font-serif font-black tracking-tight text-gray-900"
+                  >
+                    {homepage.section2Title}
+                  </h2>
+                )}
+              </div>
+              {hasText(homepage.textSection2) && (
+                <div
+                  class="editorial-prose max-w-md text-gray-500 font-serif text-base leading-relaxed"
+                  set:html={renderRichText(homepage.textSection2, "section2")}
+                />
+              )}
+            </div>
+
+            <div class="flex flex-col lg:flex-row gap-12 items-start">
+              <div class="w-full lg:w-5/12 flex flex-col gap-4">
+                {
+                  homepage.characters &&
+                    homepage.characters.map((char, index) => (
+                      <div
+                        class="character-row group relative bg-gray-50/50 hover:bg-gray-50 p-6 rounded-2xl cursor-pointer border border-transparent transition-all duration-300 select-none flex items-center justify-between"
+                        data-index={index}
+                      >
+                        <div
+                          class={`absolute left-0 top-1/4 bottom-1/4 w-1 ${char.color} rounded-r-full opacity-0 scale-y-50 transition-all duration-300 group-[.is-active]:opacity-100 group-[.is-active]:scale-y-100 group-[.is-active]:top-4 group-[.is-active]:bottom-4`}
+                        />
+                        <div class="flex items-center gap-5 pl-2">
+                          <div class="w-16 h-16 rounded-xl bg-gray-200 overflow-hidden shrink-0 shadow-xs border border-white transition-transform duration-500 group-hover:scale-105 group-[.is-active]:scale-105">
+                            {char.image ? (
+                              <img
+                                src={char.image}
+                                alt={char.name}
+                                class="w-full h-full object-cover"
+                              />
+                            ) : (
+                              <div class="w-full h-full flex items-center justify-center text-gray-400 bg-gray-100">
+                                <span class="font-serif text-lg font-bold">
+                                  {char.name ? char.name[0] : "?"}
+                                </span>
+                              </div>
+                            )}
+                          </div>
+                          <div>
+                            <h3 class="text-xl font-bold text-gray-900 tracking-tight group-hover:text-gray-950">
+                              {char.name}{" "}
+                              <span class="text-sm font-normal text-gray-400 font-serif">
+                                , {char.age}
+                              </span>
+                            </h3>
+                            <p class="text-xs font-semibold tracking-wider text-gray-400 uppercase mt-0.5">
+                              {char.job}
+                            </p>
+                          </div>
+                        </div>
+                        <div class="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center transition-all duration-300 bg-white group-hover:border-gray-400 group-[.is-active]:bg-gray-900 group-[.is-active]:border-gray-900 group-[.is-active]:text-white">
+                          <svg
+                            class="w-4 h-4 transform transition-transform duration-500 -rotate-45 group-[.is-active]:rotate-0"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2.5"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"
+                            />
+                          </svg>
+                        </div>
+                      </div>
+                    ))
+                }
+              </div>
+
+              <div
+                class="w-full lg:w-7/12 lg:sticky lg:top-8 h-100 sm:h-112.5 bg-gray-50/30 rounded-3xl border border-gray-100 p-8 md:p-12 relative flex items-center justify-center overflow-hidden"
+              >
+                <div
+                  class="absolute inset-0 flex items-center justify-center opacity-[0.02] pointer-events-none select-none"
+                >
+                  <span class="text-[12rem] font-serif font-black">ESSAY</span>
+                </div>
+
+                <div
+                  id="story-placeholder"
+                  class="text-center max-w-xs transition-opacity duration-300 z-10"
+                >
+                  <svg
+                    class="w-8 h-8 text-gray-300 mx-auto mb-4"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25"
+                    ></path>
+                  </svg>
+                  <p
+                    class="text-xs font-bold uppercase tracking-widest text-gray-400"
+                  >
+                    Pilih salah satu tokoh untuk membaca kisah mereka
+                  </p>
+                </div>
+
+                {
+                  homepage.characters &&
+                    homepage.characters.map((char, index) => (
+                      <div
+                        id={`story-content-${index}`}
+                        class="story-content opacity-0 pointer-events-none w-full h-full flex flex-col justify-start transform translate-y-4 transition-all duration-500 ease-out z-10"
+                      >
+                        <div class="flex items-center gap-2 mb-6 shrink-0">
+                          <span class={`w-2 h-2 rounded-full ${char.color}`} />
+                          <span class="text-xs font-bold uppercase tracking-widest text-gray-400">
+                            Catatan Naratif &bull; {char.name}
+                          </span>
+                        </div>
+
+                        <div class="overflow-y-auto pr-2 pb-6 max-h-70 sm:max-h-80 scrollbar-none relative">
+                          <p class="story-text text-gray-700 font-serif text-lg leading-relaxed antialiased first-letter:text-5xl first-letter:font-black first-letter:text-gray-950 first-letter:mr-3 first-letter:float-left first-letter:font-sans first-letter:leading-none">
+                            {char.story}
+                          </p>
+                        </div>
+
+                        <div class="absolute bottom-0 left-0 right-0 h-12 bg-linear-to-t from-gray-50/80 to-transparent pointer-events-none rounded-b-3xl" />
+                      </div>
+                    ))
+                }
+              </div>
+            </div>
+          </div>
+        </section>
+      )
+    }
+
+    {
+      showSection3 && (
+        <section class="relative overflow-visible py-12">
+          {hasText(homepage.section3Title) && (
+            <div class="flex justify-center px-4 mb-8">
+              <div class="w-11/12 md:w-8/12 xl:w-6/12">
+                <h2
+                  class="text-3xl md:text-4xl font-black mb-6 text-gray-900 border-b-2 border-red-500 pb-2 inline-block"
+                  data-motion="fade-right"
+                >
+                  {homepage.section3Title}
+                </h2>
+              </div>
+            </div>
+          )}
+          {hasText(homepage.textSection3) && (
+            <div class="flex justify-center px-4">
+              <div class="w-11/12 md:w-8/12 xl:w-6/12">
+                <div
+                  class="editorial-prose text-lg md:text-xl text-gray-800 font-serif leading-relaxed"
+                  set:html={renderRichText(homepage.textSection3, "section3")}
+                />
+              </div>
+            </div>
+          )}
+        </section>
+      )
+    }
+
+    {
+      showSection4 && (
+        <section class="relative overflow-visible pb-12 bg-stone-50 py-8">
+          {hasText(homepage.section4Title) && (
+            <div class="flex justify-center px-4 mb-8">
+              <div class="w-11/12 md:w-8/12 xl:w-6/12">
+                <h2
+                  class="text-3xl md:text-4xl font-black mb-6 text-gray-900 border-b-2 border-red-500 pb-2 inline-block"
+                  data-motion="fade-right"
+                >
+                  {homepage.section4Title}
+                </h2>
+              </div>
+            </div>
+          )}
+          {hasText(homepage.textSection4) && (
+            <div class="flex justify-center px-4">
+              <div class="w-11/12 md:w-8/12 xl:w-6/12">
+                <div
+                  class="editorial-prose text-lg md:text-xl text-gray-800 font-serif leading-relaxed"
+                  set:html={renderRichText(homepage.textSection4, "section4")}
+                />
+              </div>
+            </div>
+          )}
+        </section>
+      )
+    }
+
+    {
+      showVideoSection && (
+        <section class="py-8 md:py-16 relative">
+          <div class="flex justify-center px-4">
+            <div class="w-full md:w-10/12" data-motion="zoom-in">
+              <div
+                class="relative w-full aspect-video flex items-center justify-center overflow-visible p-4 md:p-8"
+              >
+                <div
+                  class="w-full h-full bg-gray-800 border-8 md:border-16 border-[#eccb2f] shadow-2xl rotate-1 flex items-center justify-center group relative overflow-hidden z-10 hover:rotate-0 transition-transform duration-500"
+                >
+                  <iframe
+                    class="w-full h-full absolute inset-0 z-20"
+                    src={homepage.videoUrl}
+                    title="YouTube video player"
+                    frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowfullscreen
+                  />
+                </div>
+                <div
+                  class="absolute inset-4 md:inset-8 bg-[#eccb2f]/30 -rotate-2 rounded z-0"
+                  data-motion="fade-in"
+                  style="animation-delay: 300ms"
+                >
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      </div>
-    </section>
+        </section>
+      )
+    }
 
-    <!-- Section 6 -->
-    <section class="relative overflow-visible py-12">
-      {
-        homepage.section6Title && (
-          <div class="flex justify-center px-4 mb-8">
-            <div class="w-11/12 md:w-8/12 xl:w-6/12">
-              <h2
-                class="text-3xl md:text-4xl font-black mb-6 text-gray-900 border-b-2 border-red-500 pb-2 inline-block"
-                data-motion="fade-right"
+    {
+      showSection5 && (
+        <section class="relative overflow-visible pb-12 pt-8">
+          {hasText(homepage.section5Title) && (
+            <div class="flex justify-center px-4 mb-8">
+              <div class="w-11/12 md:w-8/12 xl:w-6/12">
+                <h2
+                  class="text-3xl md:text-4xl font-black mb-6 border-b-2 border-red-500 pb-2 inline-block"
+                  data-motion="zoom-in"
+                >
+                  {homepage.section5Title}
+                </h2>
+              </div>
+            </div>
+          )}
+          {hasText(homepage.textSection5) && (
+            <div class="flex justify-center px-4">
+              <div class="w-11/12 md:w-8/12 xl:w-6/12">
+                <div
+                  class="editorial-prose text-lg md:text-xl text-gray-800 font-serif leading-relaxed"
+                  set:html={renderRichText(homepage.textSection5, "section5")}
+                />
+              </div>
+            </div>
+          )}
+        </section>
+      )
+    }
+
+    {
+      showGraphicSection && (
+        <section class="relative overflow-hidden">
+          <div class="flex justify-center px-4 relative z-10">
+            <div class="w-full">
+              <div
+                class="relative w-full h-112 md:h-160 flex items-center justify-center overflow-visible"
               >
-                {homepage.section6Title}
-              </h2>
+                <div
+                  class="relative w-88 aspect-4/5 bg-stone-100 border-4 border-gray-900 shadow-2xl rotate-2 hover:rotate-0 transition-transform duration-500 ease-out cursor-pointer overflow-hidden z-10"
+                  data-motion="zoom-in"
+                  style="animation-delay: 200ms"
+                >
+                  <div class="relative w-full h-full group">
+                    {hasText(homepage.graphic2A) ? (
+                      <img
+                        src={homepage.graphic2A}
+                        alt="Graphic Showcase"
+                        class="w-full h-full object-cover grayscale-0 md:grayscale contrast-110 md:group-hover:grayscale-0 transition-all duration-700 ease-out"
+                      />
+                    ) : (
+                      <div class="w-full h-full flex flex-col items-center justify-center text-gray-500 font-sans p-6 text-center">
+                        <svg
+                          class="w-8 h-8 text-gray-400 mb-2"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="1.5"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 017.5 0z"
+                          />
+                        </svg>
+                        <span class="text-xs font-bold uppercase tracking-widest text-gray-400">
+                          Graphic 2A
+                        </span>
+                      </div>
+                    )}
+                    {hasText(homepage.graphic2ACaption) && (
+                      <div
+                        class="absolute bottom-4 left-4 bg-zinc-900/95 backdrop-blur-xs text-white py-1.5 px-3 text-[9px] font-mono tracking-widest uppercase opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xs"
+                      >
+                        {homepage.graphic2ACaption}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-        )
-      }
-      <div class="flex justify-center px-4">
-        <div class="w-11/12 md:w-8/12 xl:w-6/12">
-          <div
-            class="editorial-prose text-lg md:text-xl text-gray-800 font-serif leading-relaxed"
-            set:html={renderRichText(homepage.textSection6, "section6")}
-          />
-        </div>
-      </div>
-    </section>
+        </section>
+      )
+    }
 
-    <!-- Section 7 -->
-    <section class="relative overflow-visible pb-12">
-      {
-        homepage.section7Title && (
-          <div class="flex justify-center px-4 mb-8">
-            <div class="w-11/12 md:w-8/12 xl:w-6/12">
-              <h2
-                class="text-3xl md:text-4xl font-black mb-6 text-red-600 border-b-2 border-gray-300 pb-2 inline-block"
-                data-motion="fade-right"
-              >
-                {homepage.section7Title}
-              </h2>
+    {
+      showSection6 && (
+        <section class="relative overflow-visible py-12">
+          {hasText(homepage.section6Title) && (
+            <div class="flex justify-center px-4 mb-8">
+              <div class="w-11/12 md:w-8/12 xl:w-6/12">
+                <h2
+                  class="text-3xl md:text-4xl font-black mb-6 text-gray-900 border-b-2 border-red-500 pb-2 inline-block"
+                  data-motion="fade-right"
+                >
+                  {homepage.section6Title}
+                </h2>
+              </div>
             </div>
-          </div>
-        )
-      }
-      <div class="flex justify-center px-4">
-        <div class="w-11/12 md:w-8/12 xl:w-6/12">
-          <div
-            class="editorial-prose text-lg md:text-xl text-gray-800 font-serif leading-relaxed"
-            set:html={renderRichText(homepage.textSection7, "section7")}
-          />
-        </div>
-      </div>
-    </section>
+          )}
+          {hasText(homepage.textSection6) && (
+            <div class="flex justify-center px-4">
+              <div class="w-11/12 md:w-8/12 xl:w-6/12">
+                <div
+                  class="editorial-prose text-lg md:text-xl text-gray-800 font-serif leading-relaxed"
+                  set:html={renderRichText(homepage.textSection6, "section6")}
+                />
+              </div>
+            </div>
+          )}
+        </section>
+      )
+    }
+
+    {
+      showSection7 && (
+        <section class="relative overflow-visible pb-12">
+          {hasText(homepage.section7Title) && (
+            <div class="flex justify-center px-4 mb-8">
+              <div class="w-11/12 md:w-8/12 xl:w-6/12">
+                <h2
+                  class="text-3xl md:text-4xl font-black mb-6 text-red-600 border-b-2 border-gray-300 pb-2 inline-block"
+                  data-motion="fade-right"
+                >
+                  {homepage.section7Title}
+                </h2>
+              </div>
+            </div>
+          )}
+          {hasText(homepage.textSection7) && (
+            <div class="flex justify-center px-4">
+              <div class="w-11/12 md:w-8/12 xl:w-6/12">
+                <div
+                  class="editorial-prose text-lg md:text-xl text-gray-800 font-serif leading-relaxed"
+                  set:html={renderRichText(homepage.textSection7, "section7")}
+                />
+              </div>
+            </div>
+          )}
+        </section>
+      )
+    }
 
     <div id="scroll-tracker" class="h-px w-full clear-both"></div>
 
-    <!-- Section 8 (Dark Mode Wrap) -->
-    <section
-      class="relative bg-stone-950 text-white py-24 px-4 sm:px-6 rounded-t-[40px] md:rounded-t-[60px] overflow-hidden"
-    >
-      <div
-        class="absolute -right-16 -bottom-16 w-64 h-64 border border-white/5 rounded-full pointer-events-none"
-      >
-      </div>
+    {
+      showSection8 && (
+        <section
+          class="relative bg-stone-950 text-white py-24 px-4 sm:px-6 rounded-t-[40px] md:rounded-t-[60px] overflow-hidden"
+        >
+          <div
+            class="absolute -right-16 -bottom-16 w-64 h-64 border border-white/5 rounded-full pointer-events-none"
+          >
+          </div>
 
-      {
-        homepage.section8Title && (
-          <div class="flex justify-center px-4 mb-12">
-            <div class="w-11/12 md:w-8/12 xl:w-6/12 text-center">
-              <h2
-                class="text-3xl md:text-4xl font-serif font-black tracking-tight mb-2 text-white inline-block"
-                data-motion="fade-up"
-              >
-                {homepage.section8Title}
-              </h2>
-              <div class="w-12 h-1 bg-yellow-400 mx-auto mt-4 rounded-full" />
+          {hasText(homepage.section8Title) && (
+            <div class="flex justify-center px-4 mb-12">
+              <div class="w-11/12 md:w-8/12 xl:w-6/12 text-center">
+                <h2
+                  class="text-3xl md:text-4xl font-serif font-black tracking-tight mb-2 text-white inline-block"
+                  data-motion="fade-up"
+                >
+                  {homepage.section8Title}
+                </h2>
+                <div class="w-12 h-1 bg-yellow-400 mx-auto mt-4 rounded-full" />
+              </div>
+            </div>
+          )}
+
+          {hasText(homepage.textSection8) && (
+            <div class="flex justify-center px-4">
+              <div class="w-11/12 md:w-8/12 xl:w-6/12">
+                <div
+                  class="editorial-prose editorial-prose-dark text-lg md:text-xl text-stone-300 font-serif leading-relaxed antialiased"
+                  set:html={renderRichText(homepage.textSection8, "section8")}
+                />
+              </div>
+            </div>
+          )}
+        </section>
+      )
+    }
+
+    {
+      showCredits && (
+        <section
+          class="bg-stone-950 text-stone-400 py-16 border-t border-stone-900 px-4 sm:px-6"
+        >
+          <div
+            class="max-w-4xl mx-auto border border-stone-800 rounded-3xl p-8 md:p-12 bg-stone-900/30 relative overflow-hidden"
+            data-motion="fade-up"
+          >
+            <div
+              class="flex items-center gap-3 mb-10 border-b border-stone-800 pb-6"
+            >
+              <span class="w-1.5 h-3 bg-red-600 rounded-xs"></span>
+              {hasText(homepage.creditsTitle) && (
+                <h3
+                  class="text-xs font-black tracking-widest text-stone-200 uppercase font-sans"
+                >
+                  {homepage.creditsTitle}
+                </h3>
+              )}
+            </div>
+
+            <div
+              class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-8 gap-y-8 font-sans"
+            >
+              {
+                homepage.creditWriter && (
+                  <div class="space-y-1">
+                    <span class="text-[10px] font-bold uppercase tracking-widest text-stone-500 block">
+                      Writer
+                    </span>
+                    <p class="text-sm font-bold text-stone-200">
+                      {homepage.creditWriter}
+                    </p>
+                  </div>
+                )
+              }
+
+              {
+                homepage.creditResearcher && (
+                  <div class="space-y-1">
+                    <span class="text-[10px] font-bold uppercase tracking-widest text-stone-500 block">
+                      Researcher
+                    </span>
+                    <p class="text-sm font-bold text-stone-200">
+                      {homepage.creditResearcher}
+                    </p>
+                  </div>
+                )
+              }
+
+              {
+                homepage.creditEditor && (
+                  <div class="space-y-1">
+                    <span class="text-[10px] font-bold uppercase tracking-widest text-stone-500 block">
+                      Editor
+                    </span>
+                    <p class="text-sm font-bold text-stone-200">
+                      {homepage.creditEditor}
+                    </p>
+                  </div>
+                )
+              }
+
+              {
+                homepage.creditVideoDirector && (
+                  <div class="space-y-1">
+                    <span class="text-[10px] font-bold uppercase tracking-widest text-stone-500 block">
+                      Video Director
+                    </span>
+                    <p class="text-sm font-bold text-stone-200">
+                      {homepage.creditVideoDirector}
+                    </p>
+                  </div>
+                )
+              }
+
+              {
+                homepage.creditVideoEditor && (
+                  <div class="space-y-1">
+                    <span class="text-[10px] font-bold uppercase tracking-widest text-stone-500 block">
+                      Video Editor
+                    </span>
+                    <p class="text-sm font-bold text-stone-200">
+                      {homepage.creditVideoEditor}
+                    </p>
+                  </div>
+                )
+              }
+
+              {
+                homepage.creditWebEditor && (
+                  <div class="space-y-1">
+                    <span class="text-[10px] font-bold uppercase tracking-widest text-stone-500 block">
+                      Web Editor
+                    </span>
+                    <p class="text-sm font-bold text-stone-200">
+                      {homepage.creditWebEditor}
+                    </p>
+                  </div>
+                )
+              }
             </div>
           </div>
-        )
-      }
+        </section>
+      )
+    }
 
-      <div class="flex justify-center px-4">
-        <div class="w-11/12 md:w-8/12 xl:w-6/12">
-          <!-- Uses editorial-prose-dark to flip quote colors -->
-          <div
-            class="editorial-prose editorial-prose-dark text-lg md:text-xl text-stone-300 font-serif leading-relaxed antialiased"
-            set:html={renderRichText(homepage.textSection8, "section8")}
-          />
-        </div>
-      </div>
-    </section>
-
-    <!-- Dynamic Section: Editorial Credits Board -->
-    <section
-      class="bg-stone-950 text-stone-400 py-16 border-t border-stone-900 px-4 sm:px-6"
-    >
-      <div
-        class="max-w-4xl mx-auto border border-stone-800 rounded-3xl p-8 md:p-12 bg-stone-900/30 relative overflow-hidden"
-        data-motion="fade-up"
-      >
-        <div
-          class="flex items-center gap-3 mb-10 border-b border-stone-800 pb-6"
+    {
+      showFooter && (
+        <section
+          class="relative bg-stone-950 text-stone-400 pt-8 pb-16 border-t border-stone-900 px-4 sm:px-6"
         >
-          <span class="w-1.5 h-3 bg-red-600 rounded-xs"></span>
-          <h3
-            class="text-xs font-black tracking-widest text-stone-200 uppercase font-sans"
-          >
-            {homepage.creditsTitle || "Tim Redaksi & Produksi"}
-          </h3>
-        </div>
+          <div class="max-w-4xl mx-auto text-center space-y-8">
+            {hasText(homepage.footerMessage) && (
+              <div
+                class="editorial-prose max-w-xl mx-auto text-stone-200 font-serif text-base leading-relaxed italic"
+                data-motion="fade-in"
+                set:html={renderRichText(homepage.footerMessage, "footer")}
+              />
+            )}
 
-        <div
-          class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-8 gap-y-8 font-sans"
-        >
-          {
-            homepage.creditWriter && (
-              <div class="space-y-1">
-                <span class="text-[10px] font-bold uppercase tracking-widest text-stone-500 block">
-                  Writer
-                </span>
-                <p class="text-sm font-bold text-stone-200">
-                  {homepage.creditWriter}
-                </p>
+            {hasText(homepage.footerMessage) && (
+              <div
+                class="w-12 h-px bg-stone-800 mx-auto"
+                data-motion="fade-in"
+                style="animation-delay: 200ms"
+              >
               </div>
-            )
-          }
+            )}
 
-          {
-            homepage.creditResearcher && (
-              <div class="space-y-1">
-                <span class="text-[10px] font-bold uppercase tracking-widest text-stone-500 block">
-                  Researcher
-                </span>
-                <p class="text-sm font-bold text-stone-200">
-                  {homepage.creditResearcher}
-                </p>
-              </div>
-            )
-          }
+            <div
+              class="max-w-2xl mx-auto space-y-3 text-[11px] font-sans text-stone-400 leading-normal"
+              data-motion="fade-in"
+              style="animation-delay: 300ms"
+            >
+              {
+                hasText(homepage.aiDisclaimer) && (
+                  <p>
+                    <span class="font-semibold text-stone-300">Disclaimer:</span>{" "}
+                    {homepage.aiDisclaimer}
+                  </p>
+                )
+              }
 
-          {
-            homepage.creditEditor && (
-              <div class="space-y-1">
-                <span class="text-[10px] font-bold uppercase tracking-widest text-stone-500 block">
-                  Editor
-                </span>
-                <p class="text-sm font-bold text-stone-200">
-                  {homepage.creditEditor}
-                </p>
-              </div>
-            )
-          }
-
-          {
-            homepage.creditVideoDirector && (
-              <div class="space-y-1">
-                <span class="text-[10px] font-bold uppercase tracking-widest text-stone-500 block">
-                  Video Director
-                </span>
-                <p class="text-sm font-bold text-stone-200">
-                  {homepage.creditVideoDirector}
-                </p>
-              </div>
-            )
-          }
-
-          {
-            homepage.creditVideoEditor && (
-              <div class="space-y-1">
-                <span class="text-[10px] font-bold uppercase tracking-widest text-stone-500 block">
-                  Video Editor
-                </span>
-                <p class="text-sm font-bold text-stone-200">
-                  {homepage.creditVideoEditor}
-                </p>
-              </div>
-            )
-          }
-
-          {
-            homepage.creditWebEditor && (
-              <div class="space-y-1">
-                <span class="text-[10px] font-bold uppercase tracking-widest text-stone-500 block">
-                  Web Editor
-                </span>
-                <p class="text-sm font-bold text-stone-200">
-                  {homepage.creditWebEditor}
-                </p>
-              </div>
-            )
-          }
-        </div>
-      </div>
-    </section>
-
-    <!-- Clean, High-End Footer Message Section -->
-    <section
-      class="relative bg-stone-950 text-stone-400 pt-8 pb-16 border-t border-stone-900 px-4 sm:px-6"
-    >
-      <div class="max-w-4xl mx-auto text-center space-y-8">
-        <div
-          class="editorial-prose max-w-xl mx-auto text-stone-200 font-serif text-base leading-relaxed italic"
-          data-motion="fade-in"
-          set:html={renderRichText(homepage.footerMessage, "footer")}
-        />
-
-        <div
-          class="w-12 h-px bg-stone-800 mx-auto"
-          data-motion="fade-in"
-          style="animation-delay: 200ms"
-        >
-        </div>
-
-        <div
-          class="max-w-2xl mx-auto space-y-3 text-[11px] font-sans text-stone-400 leading-normal"
-          data-motion="fade-in"
-          style="animation-delay: 300ms"
-        >
-          {
-            homepage.aiDisclaimer && (
-              <p>
-                <span class="font-semibold text-stone-300">Disclaimer:</span>{" "}
-                {homepage.aiDisclaimer}
+              <p
+                class="pt-6 font-mono text-[10px] tracking-wider text-stone-500 uppercase"
+              >
+                &copy; {new Date().getFullYear()} Tiga Cerita, Satu Realitas. All rights
+                reserved.
               </p>
-            )
-          }
-
-          <p
-            class="pt-6 font-mono text-[10px] tracking-wider text-stone-500 uppercase"
-          >
-            &copy; {new Date().getFullYear()} Tiga Cerita, Satu Realitas. All rights
-            reserved.
-          </p>
-        </div>
-      </div>
-    </section>
+            </div>
+          </div>
+        </section>
+      )
+    }
   </main>
 </Layout>
 
@@ -834,12 +908,6 @@ function renderRichText(
           if (entry.isIntersecting) {
             if (el.dataset.delay) el.style.transitionDelay = el.dataset.delay;
             el.classList.add("is-visible");
-            // } else {
-            //   if (entry.boundingClientRect.top > 0) {
-            //     el.style.transitionDelay = "0ms";
-            //     el.classList.remove("is-visible");
-            //   }
-            // }
           } else {
             el.style.transitionDelay = "0ms";
             el.classList.remove("is-visible");
@@ -900,28 +968,27 @@ function renderRichText(
         if (row.classList.contains("is-active")) {
           row.classList.remove("is-active");
           if (targetContent) {
-            targetContent.classList.add("opacity-0", "translate-y-4");
-            setTimeout(() => targetContent.classList.add("hidden"), 300);
+            targetContent.classList.add("opacity-0", "translate-y-4", "pointer-events-none");
           }
-          placeholder?.classList.remove("hidden", "opacity-0");
+          placeholder?.classList.remove("opacity-0", "pointer-events-none");
           return;
         }
 
         rows.forEach((r) => r.classList.remove("is-active"));
         storyContents.forEach((content) => {
-          content.classList.add("hidden", "opacity-0", "translate-y-4");
+          content.classList.add("opacity-0", "translate-y-4", "pointer-events-none");
         });
 
         row.classList.add("is-active");
-        placeholder?.classList.add("hidden");
+        placeholder?.classList.add("opacity-0", "pointer-events-none");
 
         if (targetContent) {
-          targetContent.classList.remove("hidden");
+          targetContent.classList.remove("opacity-0", "translate-y-4", "pointer-events-none");
           const scrollableArea =
             targetContent.querySelector(".overflow-y-auto");
           if (scrollableArea) scrollableArea.scrollTop = 0;
           requestAnimationFrame(() => {
-            targetContent.classList.remove("opacity-0", "translate-y-4");
+            targetContent.classList.remove("opacity-0", "translate-y-4", "pointer-events-none");
           });
         }
       });
